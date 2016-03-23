@@ -1,0 +1,18 @@
+{
+  "collections": {
+    "movies": [
+      {
+        "TMDb":{
+          "_id": 550
+        }
+      },
+      {
+        "title": "Pulp Fiction",
+        "release_year": 1994
+      },
+      {
+        "title": "Forest Gump"
+      }
+    ]
+  }
+}

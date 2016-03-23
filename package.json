@@ -1,0 +1,21 @@
+{
+  "name": "movienight",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests\\ --recursive"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^1.5.2",
+    "mongodb": "^2.1.7",
+    "mongoose": "^4.4.9"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "should": "^8.2.2"
+  }
+}
