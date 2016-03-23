@@ -1,64 +1,88 @@
-var should = require('should')
-  , DB = require('../../db')
-  , fixtures = require('../fixtures/model-movies');
+var utils = require('../utils'),
+    should = require('should'),
+    Movie = require('../../models/movie.js');
 
-var movie = require('../../models/movie');
+describe('Model movie ', function() {
 
-describe('Model movie Tests', function() {
-
-  before(function(done) {
-    DB.connect(DB.MODE_TEST, done);
-  })
-
-  beforeEach(function(done) {
-    DB.drop(function(err) {
-      if (err) return done(err);
-      DB.fixtures(fixtures, done);
+  it('gets created', function(done) {
+    var fightClub = new Movie({
+      title: 'Fight Club',
+      release_year: 1999,
+      score: {
+        rottenTomato:{
+          tomatometer: 79,
+          avg: 7.3
+        },
+        flixster:{
+          id: 13153,
+          audienceScore: 96,
+          avg: 4.2
+        },
+        imdb:{
+          id: 'tt0137523',
+          score: 8.9
+        },
+        TMDb:{
+          id: 550,
+          score: 8.0
+        }
+      }
     });
-  });
 
-  it('all', function(done) {
-    movie.all(function(err, movies) {
-      movies.length.should.eql(3)
-      done();
-    })
-  })
-
-  it('create', function(done) {
-    movie.create('Fight Club', 1999, 'tt0137523', 13153, 550, 8.9, 79, 7.3, 96, 4.2, 8.0, function(err, id) {
-      movie.all(function(err, movies) {
-        movies.length.should.eql(4);
-        movies[3]._id.should.eql(id);
-        movies[3].title.should.eql('Fight Club');
-        movies[3].score.imdb.id.should.eql('tt0137523');
-        movies[3].score.imdb.score.should.eql(8.9);
-        // movies[3].score.tomdb._id.should.eql('');
-        // movies[3].movie.year.should.eql(1999);
-        // movies[3].movie.director.should.eql();
-        // movies[3].movie.genre.should.eql();
-        // movies[3].movie.cast.should.eql();
-        movies[3].score.flixster.id.should.eql(13153);
-        movies[3].score.flixster.audienceScore.should.eql(96);
-        movies[3].score.flixster.avg.should.eql(4.2);
-        movies[3].score.rottenTomato.tomatometer.should.eql(79);
-        movies[3].score.rottenTomato.avg.should.eql(7.3);
-        movies[3].score.TMDb.id.should.eql(550);
-        movies[3].score.TMDb.score.should.eql(8.0);
+    Movie.create(fightClub, function(err,newMovie) {
+      newMovie.save(function(err){
+        should.not.exist(err);
+        newMovie.title.should.equal('Fight Club');
+        newMovie.release_year.should.equal(1999);
+        newMovie.score.rottenTomato.tomatometer.should.equal(79);
+        newMovie.score.rottenTomato.avg.should.equal(7.3);
+        newMovie.score.flixster.id.should.equal(13153);
+        newMovie.score.flixster.audienceScore.should.equal(96);
+        newMovie.score.flixster.avg.should.equal(4.2);
+        newMovie.score.imdb.id.should.equal('tt0137523');
+        newMovie.score.imdb.score.should.equal(8.9);
+        newMovie.score.TMDb.id.should.equal(550);
+        newMovie.score.TMDb.score.should.equal(8.0);
         done();
       });
     });
   });
 
-  it('remove', function(done) {
-    movie.all(function(err, movies) {
-      movie.remove(movies[0]._id, function(err) {
-        movie.all(function(err, result) {
-          result.length.should.eql(2)
-          result[0]._id.should.not.eql(movies[0]._id)
-          result[1]._id.should.not.eql(movies[0]._id)
-          done()
-        })
-      })
-    })
-  })
-})
+  it('can be found in the collection',function(done){
+    var pulpFiction = new Movie({
+      title: 'Pulp Fiction',
+      release_year: 1994
+    });
+
+    Movie.create(pulpFiction, function(err,newMovie) {
+      newMovie.save(function(err){
+        Movie.find({},function(err,docs) {
+          docs[0].title.should.equal('Pulp Fiction');
+          docs[0].release_year.should.equal(1994);
+          done();
+        });
+      });
+    });
+  });
+
+  it('can be removed', function(done) {
+    var theMatrix = new Movie({
+      title: 'The Matrix',
+      release_year: 1999
+    });
+
+    Movie.create(theMatrix, function(err,newMovie) {
+      newMovie.save(function(err){
+        Movie.count({},function(err,nMovies) {
+          nMovies.should.equal(1);
+          Movie.remove({},function(err){
+            Movie.count({},function(err,nMovies) {
+              nMovies.should.equal(0);
+              done();
+            });
+          });
+        });
+      });
+    });
+  });
+});

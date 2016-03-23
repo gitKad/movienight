@@ -23,7 +23,7 @@ describe('Collection Maintainer', function() {
     });
   });
 
-  it('can retrieve data for a movie in the collection',function(done) {
+  it.skip('can retrieve data for a movie in the collection',function(done) {
     movie.all(function(err,movies) {
       collectionMaintainer.updatesMovieDocument(movies[1]._id,function(result) {
         done();
