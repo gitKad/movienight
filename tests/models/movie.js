@@ -1,5 +1,6 @@
 var utils = require('../utils'),
-    should = require('should'),
+    chai = require('chai'),
+    expect = chai.expect,
     Movie = require('../../models/movie.js');
 
 describe('My movie model', function() {
@@ -31,18 +32,17 @@ describe('My movie model', function() {
 
     Movie.create(fightClub, function(err,newMovie) {
       newMovie.save(function(err){
-        should.not.exist(err);
-        newMovie.title.should.equal('Fight Club');
-        newMovie.release_year.should.equal(1999);
-        newMovie.score.rottenTomato.tomatometer.should.equal(79);
-        newMovie.score.rottenTomato.avg.should.equal(7.3);
-        newMovie.score.flixster.id.should.equal(13153);
-        newMovie.score.flixster.audienceScore.should.equal(96);
-        newMovie.score.flixster.avg.should.equal(4.2);
-        newMovie.score.imdb.id.should.equal('tt0137523');
-        newMovie.score.imdb.score.should.equal(8.9);
-        newMovie.score.TMDb.id.should.equal(550);
-        newMovie.score.TMDb.score.should.equal(8.0);
+        expect(newMovie).to.have.property('title','Fight Club');
+        expect(newMovie).to.have.property('release_year',1999);
+        expect(newMovie).to.have.deep.property('score.rottenTomato.tomatometer',79);
+        expect(newMovie).to.have.deep.property('score.rottenTomato.avg',7.3);
+        expect(newMovie).to.have.deep.property('score.flixster.id',13153);
+        expect(newMovie).to.have.deep.property('score.flixster.audienceScore',96);
+        expect(newMovie).to.have.deep.property('score.flixster.avg',4.2);
+        expect(newMovie).to.have.deep.property('score.imdb.id','tt0137523');
+        expect(newMovie).to.have.deep.property('score.imdb.score',8.9);
+        expect(newMovie).to.have.deep.property('score.TMDb.id',550);
+        expect(newMovie).to.have.deep.property('score.TMDb.score',8.0);
         done();
       });
     });
@@ -57,8 +57,8 @@ describe('My movie model', function() {
     Movie.create(pulpFiction, function(err,newMovie) {
       newMovie.save(function(err){
         Movie.find({},function(err,docs) {
-          docs[0].title.should.equal('Pulp Fiction');
-          docs[0].release_year.should.equal(1994);
+          expect(docs[0]).to.have.property('title','Pulp Fiction');
+          expect(docs[0]).to.have.property('release_year',1994);
           done();
         });
       });
@@ -74,10 +74,10 @@ describe('My movie model', function() {
     Movie.create(theMatrix, function(err,newMovie) {
       newMovie.save(function(err){
         Movie.count({},function(err,nMovies) {
-          nMovies.should.equal(1);
+          expect(nMovies).to.equal(1);
           Movie.remove({},function(err){
             Movie.count({},function(err,nMovies) {
-              nMovies.should.equal(0);
+              expect(nMovies).to.equal(0);
               done();
             });
           });

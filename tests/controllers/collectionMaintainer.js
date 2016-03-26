@@ -1,4 +1,5 @@
-var should = require('should'),
+var chai = require('chai'),
+    expect = chai.expect,
     promise = require('promise'),
     Movie = require('../../models/movie'),
     collectionMaintainer = require('../../controllers/collectionMaintainer');
@@ -33,8 +34,11 @@ describe('My collection maintainer', function() {
   });
 
   it('can retrieve data for a movie in the collection',function(done) {
-    Movie.find({},function(err,movies) {
-      collectionMaintainer.updatesMovieDocument(movies[1]._id,function(result) {
+    Movie.findOne({title: 'Pulp Fiction'},function(err,aMovie) {
+      expect(aMovie).to.have.property('release_year',1994);
+      expect(aMovie.score.TMDb.id).to.be.an('undefined');
+      collectionMaintainer.updatesMovieDocument(aMovie._id,function(result) {
+        expect(result).to.have.deep.property('score.TMDb.id',680);
         done();
       });
     });

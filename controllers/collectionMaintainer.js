@@ -14,12 +14,14 @@ var collectionMaintainer = function(){
 };
 
 collectionMaintainer.prototype.updatesMovieDocument = function (documentID,cb) {
-  movie.findById(documentID,function(err,aMovie) {
-    tmdbLurker.searchMovieByTitleAndYear(aMovie.title,aMovie.release_year,5,function(tmdbResult) {
-      aMovie.TMDb = {"id":null, "score":null};
-      aMovie.TMDb.id = tmdbResult.id;
-      aMovie.TMDb.score = tmdbResult.vote_average;
-      cb(aMovie);
+  movie.findById(documentID,function(err,foundMovieInCollection) {
+    tmdbLurker.searchMovieByTitleAndYear(foundMovieInCollection.title,foundMovieInCollection.release_year,5,function(tmdbResult) {
+      foundMovieInCollection.score.TMDb = {"id":null, "score":null};
+      foundMovieInCollection.score.TMDb.id = tmdbResult.id;
+      foundMovieInCollection.score.TMDb.score = tmdbResult.vote_average;
+      foundMovieInCollection.save(function(err,savedMovieInCollection){
+        cb(savedMovieInCollection);
+      })
     });
   });
 };
