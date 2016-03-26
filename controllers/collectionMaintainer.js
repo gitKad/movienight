@@ -14,7 +14,7 @@ var collectionMaintainer = function(){
 };
 
 collectionMaintainer.prototype.updatesMovieDocument = function (documentID,cb) {
-  movie.get(documentID,function(aMovie) {
+  movie.findById(documentID,function(err,aMovie) {
     tmdbLurker.searchMovieByTitleAndYear(aMovie.title,aMovie.release_year,5,function(tmdbResult) {
       aMovie.TMDb = {"id":null, "score":null};
       aMovie.TMDb.id = tmdbResult.id;

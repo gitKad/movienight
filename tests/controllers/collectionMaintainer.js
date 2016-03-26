@@ -1,30 +1,51 @@
-// external dependencies
-var should = require('should');
-
-// models
-var movie    = require('../../models/movie'),
-    fixtures = require('../fixtures/model-movies');
-
-// modules
-var collectionMaintainer = require('../../controllers/collectionMaintainer'),
-    DB = require('../../db');
+var should = require('should'),
+    Movie = require('../../models/movie'),
+    collectionMaintainer = require('../../controllers/collectionMaintainer');
 
 describe('Collection Maintainer', function() {
 
-  before(function(done) {
+  beforeEach(function(done){
     collectionMaintainer = new collectionMaintainer();
-    DB.connect(DB.MODE_TEST, done);
-  })
-
-  beforeEach(function(done) {
-    DB.drop(function(err) {
-      if (err) return done(err);
-      DB.fixtures(fixtures, done);
+    console.log('creating fixture');
+    var fightClub = new Movie({
+      title: 'Fight Club',
+      score: {
+        TMDb:{
+          id: 550
+        }
+      }
     });
+    var pulpFiction = new Movie({
+      title: 'Pulp Fiction',
+      release_year: 1994
+    });
+    var forestGump = new Movie({
+      title: 'Forest Gump'
+    });
+    Movie.create(fightClub, function(err,newMovie) {
+        newMovie.save(function(err){
+          // done();
+        });
+    });
+    Movie.create(pulpFiction, function(err,newMovie) {
+        newMovie.save(function(err){
+          // done();
+        });
+    });
+    Movie.create(forestGump, function(err,newMovie) {
+        newMovie.save(function(err){
+
+        });
+    });
+    setTimeout(done,1000);
+
   });
 
-  it.skip('can retrieve data for a movie in the collection',function(done) {
-    movie.all(function(err,movies) {
+  before
+
+  it('can retrieve data for a movie in the collection',function(done) {
+    // this.timeout(5000);
+    Movie.find({},function(err,movies) {
       collectionMaintainer.updatesMovieDocument(movies[1]._id,function(result) {
         done();
       });

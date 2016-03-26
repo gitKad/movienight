@@ -1,24 +1,11 @@
 var should = require('should'),
-    DB = require('../../db'),
-    fixtures = require('../fixtures/model-movies');
-
-var movie      = require('../../models/movie'),
     tmdbLurker = require('../../lurkers/tmdb');
 
-describe('themoviedb Lurker',function() {
+describe('themoviedb lurker',function() {
 
-  before(function(done){
+  before(function(done) {
     tmdbLurker = new tmdbLurker();
-    DB.connect(DB.MODE_TEST, done);
-  });
-
-  beforeEach(function(done) {
-    DB.drop(function(err) {
-      if (err) {
-        return done(err);
-      }
-      DB.fixtures(fixtures, done);
-    });
+    done();
   });
 
   it('can retrieve a movie from its TMDb id', function(done) {
