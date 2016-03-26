@@ -4,9 +4,11 @@ var ObjectId = Schema.ObjectId;
 
 var userSchema = new Schema({
   profile:{
-    firstname:String,
-    lastname:String,
-    date_of_birth:Date
+    firstName:String,
+    lastName:String
+  },
+  accounts:{
+    flixster:Number
   }
 });
 
