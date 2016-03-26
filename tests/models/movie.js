@@ -2,7 +2,7 @@ var utils = require('../utils'),
     should = require('should'),
     Movie = require('../../models/movie.js');
 
-describe('Model movie ', function() {
+describe('My movie model', function() {
 
   it('gets created', function(done) {
     var fightClub = new Movie({

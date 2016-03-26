@@ -1,7 +1,7 @@
 var should = require('should'),
     tmdbLurker = require('../../lurkers/tmdb');
 
-describe('themoviedb lurker',function() {
+describe('My themoviedb lurker',function() {
 
   before(function(done) {
     tmdbLurker = new tmdbLurker();

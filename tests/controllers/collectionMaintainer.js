@@ -1,12 +1,12 @@
 var should = require('should'),
+    promise = require('promise'),
     Movie = require('../../models/movie'),
     collectionMaintainer = require('../../controllers/collectionMaintainer');
 
-describe('Collection Maintainer', function() {
+describe('My collection maintainer', function() {
 
   beforeEach(function(done){
     collectionMaintainer = new collectionMaintainer();
-    console.log('creating fixture');
     var fightClub = new Movie({
       title: 'Fight Club',
       score: {
@@ -22,29 +22,17 @@ describe('Collection Maintainer', function() {
     var forestGump = new Movie({
       title: 'Forest Gump'
     });
-    Movie.create(fightClub, function(err,newMovie) {
-        newMovie.save(function(err){
-          // done();
-        });
-    });
-    Movie.create(pulpFiction, function(err,newMovie) {
-        newMovie.save(function(err){
-          // done();
-        });
-    });
-    Movie.create(forestGump, function(err,newMovie) {
-        newMovie.save(function(err){
 
-        });
-    });
-    setTimeout(done,1000);
+    var promiseArr = [];
+    promiseArr.push(Movie.create(fightClub));
+    promiseArr.push(Movie.create(pulpFiction));
+    promiseArr.push(Movie.create(forestGump));
+
+    promise.all(promiseArr).then(done());
 
   });
 
-  before
-
   it('can retrieve data for a movie in the collection',function(done) {
-    // this.timeout(5000);
     Movie.find({},function(err,movies) {
       collectionMaintainer.updatesMovieDocument(movies[1]._id,function(result) {
         done();
