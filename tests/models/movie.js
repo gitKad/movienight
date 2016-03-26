@@ -1,6 +1,5 @@
 var utils = require('../utils'),
-    chai = require('chai'),
-    expect = chai.expect,
+    expect = require('chai').expect,
     Movie = require('../../models/movie.js');
 
 describe('My movie model', function() {

@@ -1,5 +1,4 @@
-var chai = require('chai'),
-    expect = chai.expect,
+var expect = require('chai').expect,
     promise = require('promise'),
     Movie = require('../../models/movie'),
     collectionMaintainer = require('../../controllers/collectionMaintainer');

@@ -1,5 +1,4 @@
-var chai = require('chai'),
-    expect = chai.expect,
+var expect = require('chai').expect,
     tmdbLurker = require('../../lurkers/tmdb');
 
 describe('My themoviedb lurker',function() {
