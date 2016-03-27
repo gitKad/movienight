@@ -12,25 +12,14 @@ router.get('/', function(req, res) {
   });
 });
 
-router.get('/:id', function(req, res) {
-  User.findById(req.params.id, function(err, result) {
-    if (err) {
-      res.status(500);
-      res.json(err);
-    } else {
-      res.json({result: result});
-    }
-  });
-});
-
 router.get('/signup/flixster/:flixsterId', function(req, res) {
   flixLurker = new flixLurker();
   userRegistrar = new userRegistrar();
-  flixLurker.getFlixsterUsersScores(req.params.flixsterId,1,function(response){
+  flixLurker.getFlixsterUsersScores(req.params.flixsterId,1,function(response) {
     var jsonResponse = JSON.parse(response);
-    userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user){
+    userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user) {
       res.json(user);
-    })
+    });
   });
 });
 
