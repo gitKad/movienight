@@ -1,8 +1,8 @@
 {
   "name": "movienight",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "\"# movienight\"",
+  "main": "app.js",
   "scripts": {
     "test": "mocha tests --recursive"
   },
@@ -20,5 +20,16 @@
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
     "supertest": "^1.2.0"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gitKad/movienight.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gitKad/movienight/issues"
+  },
+  "homepage": "https://github.com/gitKad/movienight#readme"
 }
