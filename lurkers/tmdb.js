@@ -1,6 +1,6 @@
 var request = require('request-promise');
 
-var key = '862bd3ca262dc33af3f3cbfc9edba993';
+var key = process.env.movienight_tmdbapikey;
 
 var tmdbLurker = function() {
 };
