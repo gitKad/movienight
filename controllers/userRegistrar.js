@@ -17,12 +17,10 @@ userRegistrar.prototype.registerFlixsterUserFromMovieRatings = function (flixste
         }
       };
       User.create(newUser,function(err,doc){
-        console.log('created a user');
         cb(doc);
       });
     }
     else {
-      console.log('found a user');
       cb(doc);
     }
   });
