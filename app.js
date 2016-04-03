@@ -7,7 +7,7 @@ function makeServer() {
     res.json({'version' : '0.0.1'}).status(200);
   });
 
-  // app.use(require('./controllers/index.js'));
+  //app.use(require('./controllers/index.js'));
 
   var server = app.listen(1337, function () {
     var port = server.address().port;

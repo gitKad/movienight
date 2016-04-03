@@ -1,10 +1,19 @@
 var expect = require('chai').expect,
     request = require('supertest'),
     express = require('express'),
-    User = require('../../models/user'),
-    app = require('../../app.js');
+    User = require('../../models/user');
 
 describe('My user API', function(){
+
+  var server;
+
+  before(function () {
+    server = require('../../app')();
+  });
+
+  after(function (done) {
+    server.close(done);
+  });
 
   it('returns all users documents',function(done){
     var alexis = {profile: {firstName:'Alexis', lastName:'Philippe'}};
@@ -12,7 +21,7 @@ describe('My user API', function(){
 
     User.create(alexis,function(err,doc) {
       User.create(morgane,function(err,doc) {
-        request(app)
+        request(server)
         .get('/users/')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
@@ -26,7 +35,7 @@ describe('My user API', function(){
   });
 
   it('signs up an account by flixsterId',function(done) {
-    request(app)
+    request(server)
     .get('/users/signup/flixster/789760392')
     .set('Accept', 'application/json')
     .expect('Content-Type', /json/)
