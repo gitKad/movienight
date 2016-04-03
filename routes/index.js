@@ -1,11 +1,8 @@
 var express = require('express'),
-    router = express.Router(),
-    flixsterLurker = require('../lurkers/flixster'),
-    userRegistrar = require('../controllers/userRegistrar'),
-    User = require('../models/user');
+    router = express.Router();
 
 router.get('/', function(req, res, next) {
-  res.json({'version' : '0.0.1'});
+  res.render('index', { title: 'movienight' });
 });
 
 module.exports = router;

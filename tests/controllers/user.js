@@ -34,7 +34,7 @@ describe('My user API', function(){
     });
   });
 
-  it('signs up an account by flixsterId',function(done) {
+  it.skip('signs up an account by flixsterId',function(done) {
     request(server)
     .get('/users/signup/flixster/789760392')
     .set('Accept', 'application/json')
