@@ -1,2 +1,2 @@
 var serverCreator = require('./factories/server');
-var server = serverCreator.makeServer();
+var server = serverCreator();
