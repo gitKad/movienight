@@ -1,5 +1,4 @@
-var mongo = require('mongodb'),
-    User = require('../models/user');
+var User = require('../models/user');
 
 var userRegistrar = function(){
 };

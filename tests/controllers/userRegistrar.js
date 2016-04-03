@@ -29,12 +29,14 @@ describe('My user Registrar', function() {
 
   it('will save a never before seen user lurked by my flixster lurker',function(done) {
     User.count({},function(err,c){
-      expect(c).to.equal(1);
+      expect(err).to.be.null;
+      var initialCount = c;
       flixsterLurker.getFlixsterUsersScores(789760392,1,function(result){
         var jsonResult = JSON.parse(result);
         userRegistrar.registerFlixsterUserFromMovieRatings(jsonResult[0],function(aUser){
           User.count({},function(err,c){
-            expect(c).to.equal(2);
+            expect(err).to.be.null;
+            expect(c).to.equal(initialCount+1);
             expect(aUser).to.have.deep.property('accounts.flixster',jsonResult[0].user.id)
             done();
           });
@@ -45,6 +47,7 @@ describe('My user Registrar', function() {
 
   it('will not duplicate accounts of previously lurked users by my flixster lurker',function(done){
     User.count({},function(err,c){
+      expect(err).to.be.null;
       expect(c).to.equal(1);
       flixsterLurker.getFlixsterUsersScores(880813768,1,function(result){
         var jsonResult = JSON.parse(result);

@@ -1,7 +1,7 @@
 var request = require('request-promise');
 
-var flixLurker = function(){
-};
+function flixLurker() {
+}
 
 flixLurker.prototype.getFlixsterUsersScores = function (userid,limit,callback) {
   var options = {
