@@ -7,7 +7,6 @@ function makeServer() {
 
   var server = app.listen(1337, function () {
     var port = server.address().port;
-    console.log('App listening on %s',port);
   });
 
   return server;
