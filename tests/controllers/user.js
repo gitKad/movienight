@@ -8,7 +8,7 @@ describe('My user API', function(){
   var server;
 
   before(function () {
-    server = require('../../app')();
+    server = require('../../factories/server')();
   });
 
   after(function (done) {
