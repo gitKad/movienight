@@ -1,12 +1,20 @@
-var express = require('express'),
-    http = require('http'),
-    app = express();
+function makeServer() {
 
-app.use(require('./controllers/index.js'));
+  var express = require('express'),
+      app = express();
 
-var server   = http.createServer(app);
-server.listen(1337, function() {
+  app.get('/', function (req, res) {
+    res.json({'version' : '0.0.1'}).status(200);
+  });
 
-});
+  // app.use(require('./controllers/index.js'));
 
-module.exports = server
+  var server = app.listen(1337, function () {
+    var port = server.address().port;
+    console.log('App listening on %s',port);
+  });
+
+  return server;
+}
+
+module.exports = makeServer;
