@@ -17,7 +17,9 @@ function makeServer() {
       res.status(err.status || 500);
   });
 
-  var server = app.listen(process.env.PORT || 1337);
+  var server = app.listen(process.env.PORT || 1337,function(){
+    console.log(process.env.NODE_ENV);
+  });
 
   return server;
 }

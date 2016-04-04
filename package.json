@@ -4,7 +4,8 @@
   "description": "\"# movienight\"",
   "main": "app.js",
   "scripts": {
-    "test": "mocha tests --recursive"
+    "test": "set NODE_ENV=test && mocha tests --recursive",
+    "start": "set NODE_ENV=development && node app.js"
   },
   "author": "",
   "license": "ISC",
