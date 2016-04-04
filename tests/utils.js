@@ -25,7 +25,23 @@ beforeEach(function (done) {
 
 
   if (mongoose.connection.readyState === 0) {
-    mongoose.connect(config.db.test, function (err) {
+
+    var dbConfig;
+    switch (process.env.NODE_ENV) {
+      case 'test':
+        dbConfig = config.db.test;
+        break;
+      case 'development':
+        dbConfig = config.db.development;
+        break;
+      case 'production':
+        dbConfig = config.db.production;
+        break;
+      default:
+        dbConfig = config.db.development;
+    }
+    
+    mongoose.connect(dbConfig, function (err) {
       if (err) {
         throw err;
       }
