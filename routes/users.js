@@ -1,15 +1,31 @@
-var express = require('express'),
-    router = express.Router(),
-    // flixsterLurker = require('../lurkers/flixster'),
-    // userRegistrar = require('../controllers/userRegistrar'),
-    User = require('../models/user');
+var express = require('express');
+var router     = express.Router();
 
-router.get('/', function(req, res, next) {
-  User.find({},function(err, docs) {
-    if(err) return next( err );
-    res.send(docs);
-  });
+var config = require('../config');
+var mongoose   = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/dev');
+var User       = require('../models/user');
+
+router.use(function(req, res, next) {
+	console.log('Something is happening.');
+	next();
 });
+
+router.get('/', function(req, res) {
+	res.json({ message: 'hooray! welcome to our api!' });
+});
+
+router.route('/users')
+
+	.get(function(req, res) {
+		User.find(function(err, users) {
+			if (err) {
+				res.send(err);
+      }
+			res.json(users);
+		});
+	});
+
 
 // router.get('/signup/flixster/:flixsterId', function(req, res,next) {
 //   flixsterLurker = new flixsterLurker();
