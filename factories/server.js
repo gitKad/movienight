@@ -1,5 +1,3 @@
-function makeServer() {
-
   var express = require('express');
   var morgan = require('morgan');
   var bodyParser = require('body-parser');
@@ -20,9 +18,7 @@ function makeServer() {
   var port = process.env.PORT || 1337;
   var server = app.listen(port,function() {
     console.log('Express server in %s mode is listening on port %d', process.env.NODE_ENV,port);
-    return server;
+    // cb();
   });
 
-}
-
-module.exports = makeServer;
+module.exports = server;

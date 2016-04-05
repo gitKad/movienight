@@ -1,1 +1,1 @@
-var server = require('./factories/server')();
+require('./factories/server')();

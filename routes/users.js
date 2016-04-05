@@ -1,9 +1,5 @@
 var express = require('express');
 var router     = express.Router();
-
-var config = require('../config');
-var mongoose   = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/dev');
 var User       = require('../models/user');
 
 router.use(function(req, res, next) {
@@ -16,7 +12,6 @@ router.get('/', function(req, res) {
 });
 
 router.route('/users')
-
 	.get(function(req, res) {
 		User.find(function(err, users) {
 			if (err) {
@@ -24,8 +19,8 @@ router.route('/users')
       }
 			res.json(users);
 		});
-	});
 
+	});
 
 // router.get('/signup/flixster/:flixsterId', function(req, res,next) {
 //   flixsterLurker = new flixsterLurker();

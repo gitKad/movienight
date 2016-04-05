@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require('../factories/db');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 

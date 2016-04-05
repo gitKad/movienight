@@ -7,11 +7,11 @@ describe('My user API', function(){
 
   var server;
 
-  before(function () {
+  beforeEach(function () {
     server = require('../../factories/server')();
   });
 
-  after(function (done) {
+  afterEach(function (done) {
     server.close(done);
   });
 
