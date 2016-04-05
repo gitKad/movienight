@@ -12,9 +12,9 @@ describe('loading express', function () {
     server.close(done);
   });
 
-  it.skip('responds to /', function testSlash(done) {
+  it('responds to /api', function testSlash(done) {
     request(server)
-      .get('/')
+      .get('/api')
       .expect(200, done);
   });
 

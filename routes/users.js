@@ -3,7 +3,7 @@ var router     = express.Router();
 var User       = require('../models/user');
 
 router.use(function(req, res, next) {
-	console.log('Something is happening.');
+	// middleware on routes?
 	next();
 });
 
