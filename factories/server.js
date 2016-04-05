@@ -17,11 +17,12 @@ function makeServer() {
       res.status(err.status || 500);
   });
 
-  var server = app.listen(process.env.PORT || 1337,function(){
-    console.log(process.env.NODE_ENV);
+  var port = process.env.PORT || 1337;
+  var server = app.listen(port,function() {
+    console.log('Express server in %s mode is listening on port %d', process.env.NODE_ENV,port);
+    return server;
   });
 
-  return server;
 }
 
 module.exports = makeServer;
