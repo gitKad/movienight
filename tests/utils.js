@@ -1,5 +1,3 @@
-// var config = require('../config');
-// var mongoose = require('mongoose');
 var mongoose = require('../factories/db');
 
 process.env.NODE_ENV = 'test';

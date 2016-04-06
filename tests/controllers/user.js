@@ -3,6 +3,9 @@ var expect = require('chai').expect,
     express = require('express'),
     User = require('../../models/user');
 
+// clearDB before each tests
+require('../utils');
+
 describe('My user API', function(){
 
   var server;
@@ -23,7 +26,6 @@ describe('My user API', function(){
       User.create(morgane,function(err,doc) {
         request(server)
         .get('/api/users/')
-        .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
         .expect(200)
         .end(function(err,res) {
@@ -34,12 +36,15 @@ describe('My user API', function(){
     });
   });
 
-  it.skip('signs up an account by flixsterId',function(done) {
+  it('signs up an account by flixsterId',function(done) {
     request(server)
     .get('/api/users/signup/flixster/789760392')
-    .set('Accept', 'application/json')
+    .expect(200)
     .expect('Content-Type', /json/)
-    .expect(200, done);
+    .end(function(err,res) {
+      expect(res.body).to.have.deep.property('accounts.flixster',789760392);
+      done();
+    });
   });
 
 });

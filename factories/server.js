@@ -19,7 +19,6 @@ function makeServer() {
   var port = process.env.PORT || 1337;
   var server = app.listen(port,function() {
     console.log('Express server in %s mode is listening on port %d', process.env.NODE_ENV,port);
-    // cb();
   });
   return server
 }

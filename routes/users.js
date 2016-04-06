@@ -22,15 +22,20 @@ router.route('/users')
 
 	});
 
-// router.get('/signup/flixster/:flixsterId', function(req, res,next) {
-//   flixsterLurker = new flixsterLurker();
-//   flixsterLurker.getFlixsterUsersScores(req.params.flixsterId,1,function(response) {
-//     var jsonResponse = JSON.parse(response);
-//     userRegistrar = new userRegistrar();
-//     userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user) {
-//       res.json(user);
-//     });
-//   });
-// });
+router.get('/users/signup/flixster/:flixsterId', function(req, res,next) {
+
+	var flixsterLurker = require('../lurkers/flixster');
+  flixsterLurker = new flixsterLurker();
+
+  flixsterLurker.getFlixsterUsersScores(req.params.flixsterId,1,function(result) {
+    var userRegistrar = require('../controllers/userRegistrar');
+    userRegistrar = new userRegistrar();
+
+		var jsonResponse = JSON.parse(result);
+    userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user) {
+      res.json(user);
+    });
+  });
+});
 
 module.exports = router;
