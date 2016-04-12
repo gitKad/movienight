@@ -28,9 +28,9 @@ describe('My user controller', function(){
   });
 
   it('can get a user from its id',function(done) {
-    var userId;
-    UserModel.findOne(function(err,doc){
-      userId = doc._id;
+    // This query ensures the test is not passing because we access the first doc
+    UserModel.find({}).skip(1).limit(1).exec(err,docs){
+      var userId = docs[0]._id;
       userController.get(userId,function(err, user) {
         expect(user).to.have.property('_id');
         expect(String(user._id)).to.eql(String(userId));

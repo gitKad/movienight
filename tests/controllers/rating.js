@@ -25,12 +25,12 @@ describe('My rating controller', function(){
       expect(users).to.have.lengthOf(2);
       done();
     });
-  });
+});
 
   it('can get a rating from its id',function(done) {
-    var ratingId;
-    RatingModel.findOne(function(err,doc){
-      ratingId = doc._id;
+    // This query ensures the test is not passing because we access the first rating
+    RatingModel.find({}).skip(1).limit(1).exec(function (err, docs) {
+      var ratingId = docs[0]._id;
       ratingController.get(ratingId,function(err, rating) {
         expect(rating).to.have.property('_id');
         expect(String(rating._id)).to.eql(String(ratingId));
