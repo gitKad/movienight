@@ -35,23 +35,22 @@ describe('My user model', function() {
   });
 
   it('gets created', function(done) {
-      var jason = new User({
-        profile:{
-          firstName:'Jason',
-          lastName:'Duff'
-        }
-      });
+    var jason = new User({
+      profile:{
+        firstName:'Jason',
+        lastName:'Duff'
+      }
+    });
 
-      User.create(jason, function(err,newUser) {
-        newUser.save(function(err){
-          expect(newUser).to.be.an('object');
-          expect(newUser).to.have.property('_id');
-          expect(newUser).to.have.deep.property('profile.firstName','Jason');
-          expect(newUser).to.have.deep.property('profile.lastName','Duff');
-          done();
-        });
+    User.create(jason, function(err,newUser) {
+      newUser.save(function(err){
+        expect(newUser).to.be.an('object');
+        expect(newUser).to.have.property('_id');
+        expect(newUser).to.have.deep.property('profile.firstName','Jason');
+        expect(newUser).to.have.deep.property('profile.lastName','Duff');
+        done();
       });
-    // });
+    });
   });
 
   it('can be found in the user registry',function(done){
