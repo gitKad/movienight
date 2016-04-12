@@ -1,6 +1,5 @@
 var express = require('express');
-var router     = express.Router();
-var User       = require('../models/user');
+var router  = express.Router();
 
 router.use(function(req, res, next) {
 	// middleware on routes?
@@ -11,16 +10,27 @@ router.get('/', function(req, res) {
 	res.json({ message: 'hooray! welcome to our api!' });
 });
 
-router.route('/users')
-	.get(function(req, res) {
-		User.find(function(err, users) {
-			if (err) {
-				res.send(err);
-      }
-			res.json(users);
-		});
-
+router.route('/users').get(function(req, res) {
+	var userController = require('../controllers/user');
+  userController = new userController();
+	userController.getAll(function(err, users) {
+		if (err) {
+			res.send(err);
+    }
+		res.json(users);
 	});
+});
+
+router.get('/users/:userId', function(req, res, next) {
+	var userController = require('../controllers/user');
+	userController = new userController();
+	userController.get(req.params.userId,function(err, user) {
+		if (err) {
+			res.send(err);
+		}
+		res.json(user);
+	});
+});
 
 router.get('/users/signup/flixster/:flixsterId', function(req, res,next) {
 

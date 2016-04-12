@@ -20,7 +20,7 @@ function makeServer() {
   var server = app.listen(port,function() {
     console.log('Express server in %s mode is listening on port %d', process.env.NODE_ENV,port);
   });
-  return server
+  return server;
 }
 
 module.exports = makeServer;

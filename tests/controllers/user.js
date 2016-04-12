@@ -1,48 +1,48 @@
-var expect = require('chai').expect,
-    request = require('supertest'),
-    express = require('express'),
-    User = require('../../models/user');
-
-// clearDB before each tests
+// Test libraries and utilities
 require('../utils');
+var expect = require('chai').expect;
+var userController = require('../../controllers/user.js');
+var UserModel = require('../../models/user');
 
-describe('My user API', function(){
+describe('My user controller', function(){
 
-  var server;
+  before(function(){
+    userController = new userController();
+  })
 
-  beforeEach(function () {
-    server = require('../../factories/server')();
+  beforeEach(function(done) {
+    var Jason = {firstname:"Jason"};
+    var Morgane = {firstname:"Morgane"};
+    UserModel.create(Jason,function(){
+      UserModel.create(Morgane,function(){
+        done();
+      })
+    })
   });
 
-  afterEach(function (done) {
-    server.close(done);
+  it('can get all users',function(done) {
+    userController.getAll(function(err,users){
+      expect(users).to.have.lengthOf(2);
+      done();
+    });
   });
 
-  it('returns all users documents',function(done){
-    var alexis = {profile: {firstName:'Alexis', lastName:'Philippe'}};
-    var morgane = {profile: {firstName:'Morgane', lastName:'Widmer'}};
-
-    User.create(alexis,function(err,doc) {
-      User.create(morgane,function(err,doc) {
-        request(server)
-        .get('/api/users/')
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end(function(err,res) {
-          expect(res.body).to.have.lengthOf(2);
-          done();
-        });
+  it('can get a user',function(done) {
+    var userId;
+    UserModel.findOne(function(err,doc){
+      userId = doc._id;
+      userController.get(userId,function(err, user) {
+        expect(user).to.have.property('_id');
+        expect(String(user._id)).to.eql(String(userId));
+        done();
       });
     });
   });
 
   it('signs up an account by flixsterId',function(done) {
-    request(server)
-    .get('/api/users/signup/flixster/789760392')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end(function(err,res) {
-      expect(res.body).to.have.deep.property('accounts.flixster',789760392);
+    var testFlixsterID = 789760392;
+    userController.flixsterSignup(testFlixsterID,function(err,user) {
+      expect(user).to.have.deep.property('accounts.flixster',testFlixsterID);
       done();
     });
   });
