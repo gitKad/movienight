@@ -27,7 +27,7 @@ describe('My user controller', function(){
     });
   });
 
-  it('can get a user',function(done) {
+  it('can get a user from its id',function(done) {
     var userId;
     UserModel.findOne(function(err,doc){
       userId = doc._id;
