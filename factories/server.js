@@ -5,7 +5,7 @@ function makeServer() {
 
   var app = express();
 
-  app.use(morgan('dev'));
+  // app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
@@ -18,7 +18,7 @@ function makeServer() {
 
   var port = process.env.PORT || 1337;
   var server = app.listen(port,function() {
-    console.log('Express server in %s mode is listening on port %d', process.env.NODE_ENV,port);
+    // console.log('Express server in %s mode is listening on port %d', process.env.NODE_ENV,port);
   });
   return server;
 }
