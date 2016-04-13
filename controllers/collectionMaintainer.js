@@ -1,20 +1,16 @@
 // external dependencies
 var mongo = require('mongodb');
 
-// models
-var movie    = require('../models/movie');
-
-// modules
-var tmdbLurker = require('../lurkers/tmdb'),
-    flixLurker = require('../lurkers/flixster');
+var Movie = require('../models/movie');
 
 var collectionMaintainer = function(){
-  tmdbLurker = new tmdbLurker();
-  flixLurker = new flixLurker();
+
 };
 
 collectionMaintainer.prototype.updatesMovieDocument = function (documentID,cb) {
-  movie.findById(documentID,function(err,foundMovieInCollection) {
+  var tmdbLurker = require('../lurkers/tmdb');
+  tmdbLurker = new tmdbLurker();
+  Movie.findById(documentID,function(err,foundMovieInCollection) {
     tmdbLurker.searchMovieByTitleAndYear(foundMovieInCollection.title,foundMovieInCollection.release_year,5,function(tmdbResult) {
       foundMovieInCollection.score.TMDb = {"id":null, "score":null};
       foundMovieInCollection.score.TMDb.id = tmdbResult.id;
@@ -24,6 +20,20 @@ collectionMaintainer.prototype.updatesMovieDocument = function (documentID,cb) {
       })
     });
   });
+};
+
+collectionMaintainer.prototype.hearsAboutThisMovieFromFlixster = function (flixsterMovie,cb) {
+  Movie.findOne({title: flixsterMovie.title, release_year:flixsterMovie.year},function(err,theMovieAlreadyInTheCollection){
+    if(!theMovieAlreadyInTheCollection){
+      var newMovieThatBelongsInCollection = new Movie({
+        title: flixsterMovie.title,
+        release_year:flixsterMovie.year
+      });
+      newMovieThatBelongsInCollection.save(function(err){
+        cb(err,this);// this.updatesMovieDocument(newMovieThatBelongsInCollection._id,cb);
+      });
+    }
+  })
 };
 
 module.exports = collectionMaintainer;

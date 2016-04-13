@@ -40,4 +40,13 @@ describe('My user api', function() {
     .end(done);
   });
 
+  it('responds to the request to refresh flixster ratings of a user', function(done) {
+    var fakeUserId = 1234;
+    request(server)
+    .get('/api/users/'+fakeUserId+'/refreshFlixsterRatings/')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(done);
+  });
+
 });

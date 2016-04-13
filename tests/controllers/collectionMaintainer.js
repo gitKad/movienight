@@ -3,10 +3,16 @@ var expect = require('chai').expect,
     Movie = require('../../models/movie'),
     collectionMaintainer = require('../../controllers/collectionMaintainer');
 
+require('../utils');
+
 describe('My collection maintainer', function() {
 
-  beforeEach(function(done){
+  before(function(done){
     collectionMaintainer = new collectionMaintainer();
+    done();
+  });
+
+  beforeEach(function(done){
     var fightClub = new Movie({
       title: 'Fight Club',
       score: {
@@ -32,7 +38,7 @@ describe('My collection maintainer', function() {
 
   });
 
-  it('can retrieve data for a movie in the collection',function(done) {
+  it('can retrieve data about a movie it only has basic information on',function(done) {
     Movie.findOne({title: 'Pulp Fiction'},function(err,aMovie) {
       expect(aMovie).to.have.property('release_year',1994);
       expect(aMovie.score.TMDb.id).to.be.an('undefined');
@@ -42,5 +48,23 @@ describe('My collection maintainer', function() {
       });
     });
   });
+
+  it('can add a movie discovered in a flixster rating to its collection', function(done){
+    var flixsterLurker = require('../../lurkers/flixster');
+    flixsterLurker = new flixsterLurker();
+    flixsterLurker.getFlixsterUsersScores(789760392,1,function(response) {
+      var jsonResponse = JSON.parse(response);
+      Movie.count({title: jsonResponse[0].movie.title, release_year:jsonResponse[0].movie.year},function(err,nMoviesBefore){
+        collectionMaintainer.hearsAboutThisMovieFromFlixster(jsonResponse[0].movie,function(err,cb){
+          Movie.count({title: jsonResponse[0].movie.title, release_year:jsonResponse[0].movie.year},function(err,nMoviesAfter){
+            expect(nMoviesAfter).to.equal(nMoviesBefore+1);
+            done();
+          });
+        });
+      });
+    });
+  });
+
+  it('will not add a movie discovered in a flixster rating that is already in the collection');
 
 });

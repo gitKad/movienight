@@ -48,4 +48,8 @@ router.get('/users/signup/flixster/:flixsterId', function(req, res,next) {
   });
 });
 
+router.get('/users/:userId/refreshFlixsterRatings', function(req, res,next) {
+	res.json('[]');
+});
+
 module.exports = router;
