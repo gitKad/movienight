@@ -1,13 +1,12 @@
 var request = require('request-promise');
 
-var key = process.env.movienight_tmdbapikey;
-
 var tmdbLurker = function() {
+  this.key = process.env.movienight_tmdbapikey;
 };
 
 tmdbLurker.prototype.getMovie = function (tmdbMovieID,limit,cb) {
   var options = {
-    url: 'https://api.themoviedb.org/3/movie/'+tmdbMovieID+'?api_key='+key
+    url: 'https://api.themoviedb.org/3/movie/'+tmdbMovieID+'?api_key='+this.key
   };
 
   request(options).then(function(body) {
@@ -17,7 +16,7 @@ tmdbLurker.prototype.getMovie = function (tmdbMovieID,limit,cb) {
 
 tmdbLurker.prototype.searchMoviePagesByTitle = function (title,page,cb) {
   var options = {
-    url: 'https://api.themoviedb.org/3/search/movie?api_key='+key+'&query='+escape(title)+'&page='+page
+    url: 'https://api.themoviedb.org/3/search/movie?api_key='+this.key+'&query='+escape(title)+'&page='+page
   };
 
   request(options).then(function(body) {
