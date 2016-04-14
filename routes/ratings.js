@@ -1,11 +1,6 @@
 var express = require('express');
 var router  = express.Router();
 
-router.use(function(req, res, next) {
-	// middleware on routes?
-	next();
-});
-
 router.route('/ratings').get(function(req, res) {
 	var ratingController = require('../controllers/rating');
   ratingController = new ratingController();

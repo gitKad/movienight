@@ -1,11 +1,6 @@
 var express = require('express');
 var router  = express.Router();
 
-router.use(function(req, res, next) {
-	// middleware on routes?
-	next();
-});
-
 router.get('/', function(req, res) {
 	res.json({ message: 'hooray! welcome to our api!' });
 });
