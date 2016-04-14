@@ -76,7 +76,7 @@ describe('My movie model', function() {
       release_year: 1999
     });
 
-    theMatrix.save(function(err){
+    theMatrix.save(function(err) {
       Movie.count({},function(err,nMovies) {
         expect(nMovies).to.equal(1);
         Movie.remove({},function(err){

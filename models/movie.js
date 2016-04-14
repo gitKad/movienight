@@ -5,6 +5,11 @@ var ObjectId = Schema.ObjectId;
 var movieSchema = new Schema({
   title: String,
   release_year: Number,
+  director: {
+    _id: Object,
+    firstname: String,
+    lastname: String
+  },
   score: {
     rottenTomato:{
       id: Number,
