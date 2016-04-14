@@ -1,6 +1,6 @@
-var expect = require('chai').expect,
-    request = require('supertest'),
-    express = require('express');
+var expect = require('chai').expect;
+var request = require('supertest');
+var express = require('express');
 
 describe('My rating api', function() {
 
