@@ -7,8 +7,8 @@ router.get('/', function(req, res) {
 
 router.route('/users').get(function(req, res) {
 	var userController = require('../controllers/user');
-  userController = new userController();
-	userController.getAll(function(err, users) {
+  var userCtrl = new userController();
+	userCtrl.getAll(function(err, users) {
 		if (err) {
 			res.send(err);
     }
@@ -18,8 +18,8 @@ router.route('/users').get(function(req, res) {
 
 router.get('/users/:userId', function(req, res, next) {
 	var userController = require('../controllers/user');
-	userController = new userController();
-	userController.get(req.params.userId,function(err, user) {
+	var userCtrl = new userController();
+	userCtrl.get(req.params.userId,function(err, user) {
 		if (err) {
 			res.send(err);
 		}
@@ -30,14 +30,14 @@ router.get('/users/:userId', function(req, res, next) {
 router.get('/users/signup/flixster/:flixsterId', function(req, res,next) {
 
 	var flixsterLurker = require('../lurkers/flixster');
-  flixsterLurker = new flixsterLurker();
+  var flixsterLrkr = new flixsterLurker();
 
-  flixsterLurker.getFlixsterUsersScores(req.params.flixsterId,1,function(result) {
+  flixsterLrkr.getFlixsterUsersScores(req.params.flixsterId,1,function(result) {
     var userRegistrar = require('../controllers/userRegistrar');
-    userRegistrar = new userRegistrar();
+    var userRgstrr = new userRegistrar();
 
 		var jsonResponse = JSON.parse(result);
-    userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user) {
+    userRgstrr.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user) {
       res.json(user);
     });
   });

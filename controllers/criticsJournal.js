@@ -1,18 +1,17 @@
 var promise = require('promise');
-var flixLurker = require('../lurkers/flixster');
-var userController = require('../controllers/user');
+var userController = require('./user');
+var collectionMaintainer = require('./collectionMaintainer');
+var flixterLurker = require('../lurkers/flixster');
 var Rating = require('../models/rating');
-var collectionMaintainer = require('../controllers/collectionMaintainer');
-
 
 var criticsJournal = function() {
-  flixLurker = new flixLurker();
-  userController = new userController();
-  collectionMaintainer = new collectionMaintainer();
+  flixLurker = new flixterLurker();
+  userCtrl = new userController();
+  collectionMtnr = new collectionMaintainer();
 };
 
 criticsJournal.prototype.getFlixsterRatings = function (userId,cb) {
-  userController.get(userId,function(err, user){
+  userCtrl.get(userId,function(err, user){
     if(!(user || user.accounts || user.accounts.flixster)){
       cb('this user doesn\'t have a flixster account');
     }
@@ -26,7 +25,7 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,cb) {
       for (var i = 0; i < jsonResult.length; i++) {
         promiseArr.push(new Promise(function(resolve){
           console.log('I\'m rating '+jsonResult[i].movie.title+' and I\'m starting processing');
-          collectionMaintainer.hearsAboutThisMovieFromFlixster(jsonResult[i].movie,function(err,movie){
+          collectionMtnr.hearsAboutThisMovieFromFlixster(jsonResult[i].movie,function(err,movie){
             Rating.findOne({movie:{_id:movie._id}, user:{id:userId}},function(err,existingRating){
               if(existingRating) {
                 existingRating.rating = result.rating;

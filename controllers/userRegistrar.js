@@ -1,27 +1,40 @@
 var User = require('../models/user');
+var criticsJournal = require('../controllers/criticsJournal');
+var promise = require('promise');
 
 var userRegistrar = function(){
+  criticsJrnl = new criticsJournal();
 };
 
 userRegistrar.prototype.registerFlixsterUserFromMovieRatings = function (flixsterMovieRating,cb) {
-  User.findOne({'accounts.flixster': flixsterMovieRating.user.id},function(err,doc) {
-    if(doc == null) {
-      var newUser = {
-        profile: {
-          firstName: flixsterMovieRating.user.firstName,
-          lastName: flixsterMovieRating.user.lastName
-        },
-        accounts: {
-          flixster: flixsterMovieRating.user.id
-        }
-      };
-      User.create(newUser,function(err,doc){
-        cb(doc);
-      });
-    }
-    else {
-      cb(doc);
-    }
+  var promiseOfAUser = new Promise(function (resolve, reject) {
+    User.findOne({'accounts.flixster': flixsterMovieRating.user.id},function(err,doc) {
+      if(err) { reject(err); }
+      if(doc == null) {
+        var newUser = new User({
+          profile: {
+            firstName: flixsterMovieRating.user.firstName,
+            lastName: flixsterMovieRating.user.lastName
+          },
+          accounts: {
+            flixster: flixsterMovieRating.user.id
+          }
+        });
+        newUser.save(function(err,doc) {
+          if(err) { reject(err); }
+          resolve(doc);
+        });
+      }
+      else {
+        resolve(doc);
+      }
+    });
+  });
+
+  promiseOfAUser.then(function(promisedUser) {
+    criticsJrnl.getFlixsterRatings(promisedUser._id,function(){
+      cb(promisedUser);
+    });
   });
 };
 
