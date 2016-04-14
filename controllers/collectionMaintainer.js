@@ -29,8 +29,8 @@ collectionMaintainer.prototype.hearsAboutThisMovieFromFlixster = function (flixs
         title: flixsterMovie.title,
         release_year:flixsterMovie.year
       });
-      newMovieThatBelongsInCollection.save(function(err){
-        cb(err,this);// this.updatesMovieDocument(newMovieThatBelongsInCollection._id,cb);
+      newMovieThatBelongsInCollection.save(function(err,savedMovie){
+        cb(err,savedMovie);// this.updatesMovieDocument(newMovieThatBelongsInCollection._id,cb);
       });
     }
   })

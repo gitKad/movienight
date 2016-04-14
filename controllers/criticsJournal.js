@@ -10,25 +10,28 @@ var criticsJournal = function() {
   collectionMtnr = new collectionMaintainer();
 };
 
-criticsJournal.prototype.getFlixsterRatings = function (userId,cb) {
+criticsJournal.prototype.getFlixsterRatings = function (userId,limit,cb) {
   userCtrl.get(userId,function(err, user){
     if(!(user || user.accounts || user.accounts.flixster)){
       cb('this user doesn\'t have a flixster account');
     }
 
     // todo manage a large amount of flixster ratings (can take up to a minute! with 400 ratings)
-    flixLurker.getFlixsterUsersScores(user.accounts.flixster,5,function(result){
+    flixLurker.getFlixsterUsersScores(user.accounts.flixster,limit,function(result){
       var jsonResult = JSON.parse(result);
 
       // I'm not good with promises yet, how can I validate that jsonResult is properly used in each context as i changes value
       var promiseArr = [];
       for (var i = 0; i < jsonResult.length; i++) {
         promiseArr.push(new Promise(function(resolve){
-          console.log('I\'m rating '+jsonResult[i].movie.title+' and I\'m starting processing');
+
+          var flixsterRating = jsonResult[i];
+
+          console.log('I\'m rating '+flixsterRating.movie.title+' and I\'m starting processing');
           collectionMtnr.hearsAboutThisMovieFromFlixster(jsonResult[i].movie,function(err,movie){
             Rating.findOne({movie:{_id:movie._id}, user:{id:userId}},function(err,existingRating){
               if(existingRating) {
-                existingRating.rating = result.rating;
+                existingRating.rating = parseInt(flixsterRating.score);
                 existingRating.save(resolve);
               } else {
                 var newRating = new Rating({
@@ -38,7 +41,7 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,cb) {
                   user:{
                     _id: userId
                   },
-                  rating: result.rating
+                  rating: parseInt(flixsterRating.score)
                 });
                 console.log('I\'m rating '+movie.title+' and I\'m done processing');
                 newRating.save(resolve);
