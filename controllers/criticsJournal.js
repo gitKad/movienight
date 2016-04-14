@@ -24,10 +24,7 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,limit,cb) {
       var promiseArr = [];
       for (var i = 0; i < jsonResult.length; i++) {
         promiseArr.push(new Promise(function(resolve){
-
           var flixsterRating = jsonResult[i];
-
-          console.log('I\'m rating '+flixsterRating.movie.title+' and I\'m starting processing');
           collectionMtnr.hearsAboutThisMovieFromFlixster(jsonResult[i].movie,function(err,movie){
             Rating.findOne({movie:{_id:movie._id}, user:{id:userId}},function(err,existingRating){
               if(existingRating) {
@@ -36,14 +33,14 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,limit,cb) {
               } else {
                 var newRating = new Rating({
                   movie:{
-                    _id: movie._id
+                    _id: movie._id,
+                    title: movie.title
                   },
                   user:{
                     _id: userId
                   },
                   rating: parseInt(flixsterRating.score)
                 });
-                console.log('I\'m rating '+movie.title+' and I\'m done processing');
                 newRating.save(resolve);
               }
             });
@@ -51,7 +48,6 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,limit,cb) {
         }));
       }
       promise.all(promiseArr).then(function(){
-        console.log('done done!');
         cb();
       });
     });

@@ -32,8 +32,8 @@ userRegistrar.prototype.registerFlixsterUserFromMovieRatings = function (flixste
   });
 
   promiseOfAUser.then(function(promisedUser) {
-    // The hardcoded one here should be 1000, but it takes like a minute to load 300 ratings!!
-    criticsJrnl.getFlixsterRatings(promisedUser._id,1,function(){
+    // The hardcoded 5 here should be 1000, but it takes like a minute to load 300 ratings!!
+    criticsJrnl.getFlixsterRatings(promisedUser._id,5,function(){
       cb(promisedUser);
     });
   });
