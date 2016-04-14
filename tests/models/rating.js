@@ -16,12 +16,7 @@ describe('My rating model', function() {
       },
       rating: 96
     });
-
-    Rating.create(jasonInceptionRating, function(err,newRating) {
-      newRating.save(function(err){
-        done();
-      });
-    });
+    jasonInceptionRating.save(done);
   });
 
   it('gets created with all its properties', function(done) {
@@ -39,15 +34,13 @@ describe('My rating model', function() {
       rating: rating
     });
 
-    Rating.create(jasonInterstellarRating, function(err,newRating) {
-      newRating.save(function(err){
-        expect(newRating).to.be.an('object');
-        expect(newRating).to.have.property('_id');
-        expect(newRating).to.have.deep.property('user._id',fakeUserId);
-        expect(newRating).to.have.deep.property('movie._id',fakeMovieId);
-        expect(newRating).to.have.property('rating',rating);
-        done();
-      });
+    jasonInterstellarRating.save(function(err,savedRating){
+      expect(savedRating).to.be.an('object');
+      expect(savedRating).to.have.property('_id');
+      expect(savedRating).to.have.deep.property('user._id',fakeUserId);
+      expect(savedRating).to.have.deep.property('movie._id',fakeMovieId);
+      expect(savedRating).to.have.property('rating',rating);
+      done();
     });
   });
 
