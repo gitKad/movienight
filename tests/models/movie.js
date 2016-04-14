@@ -4,10 +4,15 @@ var utils = require('../utils'),
 
 describe('My movie model', function() {
 
-  it('gets created', function(done) {
+  it('gets created with all its properties', function(done) {
     var fightClub = new Movie({
       title: 'Fight Club',
       release_year: 1999,
+      director: {
+        _id: 04090401,
+        firstname: 'David',
+        lastname: 'Fincher'
+      },
       score: {
         rottenTomato:{
           tomatometer: 79,
@@ -33,6 +38,9 @@ describe('My movie model', function() {
       newMovie.save(function(err){
         expect(newMovie).to.have.property('title','Fight Club');
         expect(newMovie).to.have.property('release_year',1999);
+        expect(newMovie).to.have.deep.property('director._id',04090401);
+        expect(newMovie).to.have.deep.property('director.firstname','David');
+        expect(newMovie).to.have.deep.property('director.lastname','Fincher');
         expect(newMovie).to.have.deep.property('score.rottenTomato.tomatometer',79);
         expect(newMovie).to.have.deep.property('score.rottenTomato.avg',7.3);
         expect(newMovie).to.have.deep.property('score.flixster.id',13153);
@@ -53,13 +61,11 @@ describe('My movie model', function() {
       release_year: 1994
     });
 
-    Movie.create(pulpFiction, function(err,newMovie) {
-      newMovie.save(function(err){
-        Movie.find({},function(err,docs) {
-          expect(docs[0]).to.have.property('title','Pulp Fiction');
-          expect(docs[0]).to.have.property('release_year',1994);
-          done();
-        });
+    pulpFiction.save(function(err) {
+      Movie.find({},function(err,docs) {
+        expect(docs[0]).to.have.property('title','Pulp Fiction');
+        expect(docs[0]).to.have.property('release_year',1994);
+        done();
       });
     });
   });
@@ -70,15 +76,13 @@ describe('My movie model', function() {
       release_year: 1999
     });
 
-    Movie.create(theMatrix, function(err,newMovie) {
-      newMovie.save(function(err){
-        Movie.count({},function(err,nMovies) {
-          expect(nMovies).to.equal(1);
-          Movie.remove({},function(err){
-            Movie.count({},function(err,nMovies) {
-              expect(nMovies).to.equal(0);
-              done();
-            });
+    theMatrix.save(function(err){
+      Movie.count({},function(err,nMovies) {
+        expect(nMovies).to.equal(1);
+        Movie.remove({},function(err){
+          Movie.count({},function(err,nMovies) {
+            expect(nMovies).to.equal(0);
+            done();
           });
         });
       });
