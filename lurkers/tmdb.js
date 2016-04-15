@@ -24,7 +24,6 @@ tmdbLurker.prototype.getDirectors = function (tmdbMovieID,cb) {
     var directors = jsonBody.crew.filter(function (el) {
       return el.job == 'Director' & el.department == 'Directing';
     });
-    console.log(directors);
     cb(directors);
   });
 }
