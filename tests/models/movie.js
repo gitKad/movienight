@@ -10,8 +10,7 @@ describe('My movie model', function() {
       release_year: 1999,
       directors: [{
         _id: 04090401,
-        firstname: 'David',
-        lastname: 'Fincher'
+        name: 'David Fincher'
       }],
       score: {
         rottenTomato:{
@@ -40,8 +39,7 @@ describe('My movie model', function() {
         expect(newMovie).to.have.property('release_year',1999);
         expect(newMovie).to.have.property('directors');
         expect(newMovie.directors).to.have.lengthOf(1);
-        expect(newMovie.directors[0]).to.have.property('firstname','David');
-        expect(newMovie.directors[0]).to.have.property('lastname','Fincher');
+        expect(newMovie.directors[0]).to.have.property('name','David Fincher');
         expect(newMovie).to.have.deep.property('score.rottenTomato.tomatometer',79);
         expect(newMovie).to.have.deep.property('score.rottenTomato.avg',7.3);
         expect(newMovie).to.have.deep.property('score.flixster.id',13153);
@@ -70,6 +68,8 @@ describe('My movie model', function() {
       });
     });
   });
+
+  it('can hold movies with ":" in its title') // "Che:" part one and two caused crashes
 
   it('can be removed', function(done) {
     var theMatrix = new Movie({

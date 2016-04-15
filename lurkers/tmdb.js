@@ -9,9 +9,10 @@ tmdbLurker.prototype.getMovie = function (tmdbMovieID,limit,cb) {
     url: 'https://api.themoviedb.org/3/movie/'+tmdbMovieID+'?api_key='+this.key
   };
 
-  request(options).then(function(body) {
-    cb(body);
-  });
+  request(options)
+    .then(function(body) {
+      cb(body);
+    });
 }
 
 tmdbLurker.prototype.getDirectors = function (tmdbMovieID,cb) {

@@ -11,7 +11,8 @@ describe('My rating model', function() {
         _id: 1234
       },
       movie: {
-        _id: 8765
+        _id: 8765,
+        title: 'Inception'
       },
       rating: 96
     });
@@ -21,6 +22,7 @@ describe('My rating model', function() {
   it('gets created with all its properties', function(done) {
     var fakeUserId = 1234;
     var fakeMovieId = 4321;
+    var testMovieTitle = 'Interstellar';
     var rating = 92;
 
     var jasonInterstellarRating = new Rating({
@@ -28,7 +30,8 @@ describe('My rating model', function() {
         _id: fakeUserId
       },
       movie: {
-        _id: fakeMovieId
+        _id: fakeMovieId,
+        title: testMovieTitle
       },
       rating: rating
     });
@@ -38,6 +41,7 @@ describe('My rating model', function() {
       expect(savedRating).to.have.property('_id');
       expect(savedRating).to.have.deep.property('user._id',fakeUserId);
       expect(savedRating).to.have.deep.property('movie._id',fakeMovieId);
+      expect(savedRating).to.have.deep.property('movie.title',testMovieTitle);
       expect(savedRating).to.have.property('rating',rating);
       done();
     });

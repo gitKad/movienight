@@ -25,7 +25,7 @@ describe('My rating controller', function(){
       expect(users).to.have.lengthOf(2);
       done();
     });
-});
+  });
 
   it('can get a rating from its id',function(done) {
     // This query ensures the test is not passing because we access the first rating

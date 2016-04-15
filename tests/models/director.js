@@ -8,35 +8,30 @@ describe('My director model', function() {
 
   beforeEach(function(done){
     var ChristopherNolan = new Director({
-      firstname: 'Christopher',
-      lastname: 'Nolan'
+      name: 'Christopher Nolan'
     });
     ChristopherNolan.save(done);
   });
 
   it('gets created with all its properties', function(done) {
-    var testFirstname = 'Lilly';
-    var testLastname = 'Wachowski';
+    var testName = 'Lilly Wachowski';
 
     var LillyWachowski = new Director({
-      firstname: testFirstname,
-      lastname: testLastname
+      name: testName
     });
 
     LillyWachowski.save(function(err,savedDirector) {
       var leanSavedDirector = savedDirector.toObject();
       expect(leanSavedDirector).to.be.an('object');
       expect(leanSavedDirector).to.have.property('_id');
-      expect(leanSavedDirector).to.have.property('firstname',testFirstname);
-      expect(leanSavedDirector).to.have.property('lastname',testLastname);
+      expect(leanSavedDirector).to.have.property('name',testName);
       done();
     });
   });
 
   it('can be found in the database',function(done){
     Director.findOne({},function(err,anyDirector) {
-      expect(anyDirector).to.have.property('firstname','Christopher');
-      expect(anyDirector).to.have.property('lastname','Nolan');
+      expect(anyDirector).to.have.property('name','Christopher Nolan');
       done();
     });
   });

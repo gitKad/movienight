@@ -15,11 +15,11 @@ describe('My user Registrar', function() {
   beforeEach(function(done){
     var barbu = {
       profile: {
-        firstName: 'Mathieu',
-        lastName: 'Hébert'
+        firstName: 'Alexis',
+        lastName: 'Philippe'
       },
       accounts: {
-        flixster: 880813768
+        flixster: 789760392
       }
     };
     User.create(barbu,function(err,doc){
@@ -31,7 +31,7 @@ describe('My user Registrar', function() {
     User.count({},function(err,c){
       expect(err).to.be.null;
       var initialCount = c;
-      flixsterLurker.getFlixsterUsersScores(789760392,1,function(result){
+      flixsterLurker.getFlixsterUsersScores(826612548,1,function(result){
         var jsonResult = JSON.parse(result);
         userRegistrar.registerFlixsterUserFromMovieRatings(jsonResult[0],function(aUser){
           User.count({},function(err,c){
@@ -49,7 +49,7 @@ describe('My user Registrar', function() {
     User.count({},function(err,c){
       expect(err).to.be.null;
       expect(c).to.equal(1);
-      flixsterLurker.getFlixsterUsersScores(880813768,1,function(result){
+      flixsterLurker.getFlixsterUsersScores(789760392,1,function(result){
         var jsonResult = JSON.parse(result);
         userRegistrar.registerFlixsterUserFromMovieRatings(jsonResult[0],function(aUser){
           User.count({},function(err,c){

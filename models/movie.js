@@ -7,8 +7,7 @@ var movieSchema = new Schema({
   release_year: Number,
   directors: [{
     _id: Object,
-    firstname: String,
-    lastname: String
+    name: String
   }],
   score: {
     rottenTomato:{

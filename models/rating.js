@@ -7,7 +7,8 @@ var ratingSchema = new Schema({
     _id:Object
   },
   movie:{
-    _id:Object
+    _id:Object,
+    title:String
   },
   rating:Number
 });
