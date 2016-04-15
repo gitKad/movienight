@@ -1,5 +1,5 @@
-var utils = require('../utils'),
-    expect = require('chai').expect,
+require('../utils');
+var expect = require('chai').expect;
     Movie = require('../../models/movie.js');
 
 describe('My movie model', function() {
@@ -8,11 +8,11 @@ describe('My movie model', function() {
     var fightClub = new Movie({
       title: 'Fight Club',
       release_year: 1999,
-      directors: {
+      directors: [{
         _id: 04090401,
         firstname: 'David',
         lastname: 'Fincher'
-      },
+      }],
       score: {
         rottenTomato:{
           tomatometer: 79,
@@ -38,9 +38,10 @@ describe('My movie model', function() {
       newMovie.save(function(err){
         expect(newMovie).to.have.property('title','Fight Club');
         expect(newMovie).to.have.property('release_year',1999);
-        expect(newMovie).to.have.deep.property('director._id',04090401);
-        expect(newMovie).to.have.deep.property('director.firstname','David');
-        expect(newMovie).to.have.deep.property('director.lastname','Fincher');
+        expect(newMovie).to.have.property('directors');
+        expect(newMovie.directors).to.have.lengthOf(1);
+        expect(newMovie.directors[0]).to.have.property('firstname','David');
+        expect(newMovie.directors[0]).to.have.property('lastname','Fincher');
         expect(newMovie).to.have.deep.property('score.rottenTomato.tomatometer',79);
         expect(newMovie).to.have.deep.property('score.rottenTomato.avg',7.3);
         expect(newMovie).to.have.deep.property('score.flixster.id',13153);

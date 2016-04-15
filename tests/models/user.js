@@ -1,38 +1,10 @@
-var utils = require('../utils'),
-    expect = require('chai').expect,
-    promise = require('promise'),
-    Movie = require('../../models/movie'),
-    User = require('../../models/user.js');
+require('../utils');
+var expect = require('chai').expect
+var promise = require('promise');
+var Movie = require('../../models/movie');
+var User = require('../../models/user.js');
 
 describe('My user model', function() {
-
-  before(function(done){
-    // var interstellar = new Movie({
-    //   title: 'Interstellar',
-    //   release_year:2014,
-    //   score: {
-    //     TMDb:{
-    //       id: 157336
-    //     }
-    //   }
-    // });
-    // var inception = new Movie({
-    //   title: 'Inception',
-    //   release_year:2010,
-    //   score: {
-    //     TMDb:{
-    //       id: 27205
-    //     }
-    //   }
-    // });
-    //
-    // var promiseArr = [];
-    // promiseArr.push(Movie.create(interstellar));
-    // promiseArr.push(Movie.create(inception));
-    //
-    // promise.all(promiseArr).then(done());
-    done();
-  });
 
   it('gets created', function(done) {
     var jason = new User({
