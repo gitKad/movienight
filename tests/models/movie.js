@@ -8,7 +8,7 @@ describe('My movie model', function() {
     var fightClub = new Movie({
       title: 'Fight Club',
       release_year: 1999,
-      director: {
+      directors: {
         _id: 04090401,
         firstname: 'David',
         lastname: 'Fincher'

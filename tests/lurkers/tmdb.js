@@ -54,4 +54,13 @@ describe('My themoviedb lurker',function() {
     });
   });
 
+  it('can retrieve directors of a movie',function(done){
+    tmdbLurker.getDirectors(603,function(directors){
+      expect(directors).to.have.lengthOf(2);
+      expect(directors[0]).to.have.property('name','Lilly Wachowski');
+      expect(directors[1]).to.have.property('name','Lana Wachowski');
+      done();
+    });
+  });
+
 });

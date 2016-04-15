@@ -14,6 +14,21 @@ tmdbLurker.prototype.getMovie = function (tmdbMovieID,limit,cb) {
   });
 }
 
+tmdbLurker.prototype.getDirectors = function (tmdbMovieID,cb) {
+  var options = {
+    url: 'https://api.themoviedb.org/3/movie/'+tmdbMovieID+'/credits?api_key='+this.key
+  };
+
+  request(options).then(function(body) {
+    var jsonBody = JSON.parse(body);
+    var directors = jsonBody.crew.filter(function (el) {
+      return el.job == 'Director' & el.department == 'Directing';
+    });
+    console.log(directors);
+    cb(directors);
+  });
+}
+
 tmdbLurker.prototype.searchMoviePagesByTitle = function (title,page,cb) {
   var options = {
     url: 'https://api.themoviedb.org/3/search/movie?api_key='+this.key+'&query='+escape(title)+'&page='+page
