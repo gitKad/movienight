@@ -39,6 +39,7 @@ describe('My collection maintainer', function() {
     Movie.findOne({title: 'Pulp Fiction'},function(err,aMovie) {
       expect(aMovie.score.TMDb.id).to.be.an('undefined');
       collectionMaintainer.updatesMovieDocument(aMovie._id,function(err, result) {
+        expect(result).to.be.ok;
         expect(result).to.have.deep.property('score.TMDb.id',680);
         expect(result).to.have.property('directors');
         expect(result.directors).to.have.lengthOf(1);
