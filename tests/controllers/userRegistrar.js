@@ -1,5 +1,4 @@
 var expect = require('chai').expect,
-    promise = require('promise'),
     User = require('../../models/user'),
     userRegistrar = require('../../controllers/userRegistrar'),
     flixsterLurker = require('../../lurkers/flixster');

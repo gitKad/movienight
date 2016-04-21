@@ -1,6 +1,5 @@
 var User = require('../models/user');
 var criticsJournal = require('../controllers/criticsJournal');
-var promise = require('promise');
 
 var userRegistrar = function(){
   criticsJrnl = new criticsJournal();

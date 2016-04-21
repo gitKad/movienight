@@ -1,6 +1,5 @@
 require('../utils');
 var expect = require('chai').expect;
-var promise = require('promise');
 
 var Director = require('../../models/director');
 

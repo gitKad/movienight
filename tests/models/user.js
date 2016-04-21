@@ -1,6 +1,5 @@
 require('../utils');
 var expect = require('chai').expect
-var promise = require('promise');
 var Movie = require('../../models/movie');
 var User = require('../../models/user.js');
 
