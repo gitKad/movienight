@@ -1,4 +1,3 @@
-var promise = require('promise');
 var userController = require('./user');
 var collectionMaintainer = require('./collectionMaintainer');
 var flixterLurker = require('../lurkers/flixster');
@@ -51,7 +50,7 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,limit,cb) {
           });
         }));
       }
-      promise.all(promiseArr).then(function(){
+      Promise.all(promiseArr).then(function(){
         cb(null);
       },function(err){
         cb(err);
