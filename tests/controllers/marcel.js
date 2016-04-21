@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 
-var Rating = require('../../models/Rating');
-var Movie = require('../../models/Movie');
+var Rating = require('../../models/rating');
+var Movie = require('../../models/movie');
 var CrewPref = require('../../models/prefCrew');
 var marcel = require('../../controllers/marcel');
 
