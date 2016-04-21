@@ -6,3 +6,4 @@ services:
 before_script:
   - sleep 15
   - mongo mydb_test --eval 'db.addUser("travis", "test");'
+after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
