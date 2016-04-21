@@ -2,6 +2,9 @@ var mongoose = require('../factories/db');
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
+mongoose.models = {};
+mongoose.modelSchemas = {};
+
 var movieSchema = new Schema({
   title: String,
   release_year: Number,
