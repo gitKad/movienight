@@ -37,7 +37,9 @@ describe('My collection maintainer', function() {
 
   it('can retrieve data about a movie it only has basic information on',function(done) {
     Movie.findOne({title: 'Pulp Fiction'},function(err,aMovie) {
-      expect(aMovie.score.TMDb.id).to.be.an('undefined');
+      expect(err).to.be.null;
+      expect(aMovie).to.not.be.undefined;
+      expect(aMovie.score.TMDb.id).to.be.undefined;
       collectionMaintainer.updatesMovieDocument(aMovie._id,function(err, result) {
         expect(result).to.be.ok;
         expect(result).to.have.deep.property('score.TMDb.id',680);
