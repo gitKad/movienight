@@ -1,25 +1,22 @@
 var config = require('../config');
-var mongoose   = require('mongoose');
+var Connection = require('tedious').Connection;
 
-if (mongoose.connection.readyState === 0) {
-
-  var dbConfig;
-  switch (process.env.NODE_ENV) {
-    case 'test':
-      dbConfig = config.db.test;
-      break;
-    case 'production':
-      dbConfig = config.db.production;
-      break;
-    default:
-      dbConfig = config.db.development;
-  }
-
-  mongoose.connect(dbConfig, function (err) {
-    if (err) {
-      throw err;
-    }
-  });
+var dbConfig;
+switch (process.env.NODE_ENV) {
+  case 'test':
+    dbConfig = config.test.db;
+    break;
+  case 'production':
+    dbConfig = config.production.db;
+    break;
+  default:
+    dbConfig = config.development.db;
 }
 
-module.exports = mongoose;
+var connection = new Connection(dbConfig);
+  connection.on('connect', function(err) {
+    if(err) throw err;
+      console.log("Connected to ", dbConfig);
+  });
+
+module.exports = connection;
