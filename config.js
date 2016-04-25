@@ -2,26 +2,56 @@
 module.exports = {
   production :{
     db: {
-      userName: process.env.movienight_azuredbuser,
+      username: process.env.movienight_azuredbuser,
       password: process.env.movienight_azuredbpass,
-      server: 'movienight.database.windows.net',
-      options: {encrypt: true, database: 'production'}
+      database: 'production',
+      options: {
+        host: 'movienight.database.windows.net',
+        dialect: 'mssql',
+        pool: {
+          max: 5,
+          min: 0,
+          idle: 10000
+        },
+        logging: false,
+        dialectOptions: {encrypt: true}
+      }
     }
   },
   development: {
     db: {
-      userName: process.env.movienight_azuredbuser,
+      username: process.env.movienight_azuredbuser,
       password: process.env.movienight_azuredbpass,
-      server: 'movienight.database.windows.net',
-      options: {encrypt: true, database: 'development'}
+      database: 'development',
+      options: {
+        host: 'movienight.database.windows.net',
+        dialect: 'mssql',
+        pool: {
+          max: 5,
+          min: 0,
+          idle: 10000
+        },
+        logging: console.log,
+        dialectOptions: {encrypt: true}
+      }
     }
   },
   test: {
     db: {
-      userName: process.env.movienight_azuredbuser,
+      username: process.env.movienight_azuredbuser,
       password: process.env.movienight_azuredbpass,
-      server: 'movienight.database.windows.net',
-      options: {encrypt: true, database: 'test'}
+      database: 'test',
+      options: {
+        host: 'movienight.database.windows.net',
+        dialect: 'mssql',
+        pool: {
+          max: 5,
+          min: 0,
+          idle: 10000
+        },
+        logging: false,
+        dialectOptions: {encrypt: true}
+      }
     }
   }
 };

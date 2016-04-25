@@ -1,16 +1,12 @@
-var mongoose = require('../factories/db');
-
 process.env.NODE_ENV = 'test';
 
-beforeEach(function (done) {
-  // clear DB
-  for (var i in mongoose.connection.collections) {
-    mongoose.connection.collections[i].remove(function() {});
-  }
-  return done();
-});
+var Director = require('../models/director');
+var User = require('../models/user');
 
-// afterEach(function (done) {
-//   mongoose.disconnect();
-//   return done();
-// });
+beforeEach(function (done) {
+  Director.truncate().then(function() {
+    User.truncate().then(function() {
+      done();
+    });
+  });
+});

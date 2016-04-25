@@ -1,12 +1,11 @@
-var mongoose = require('../factories/db');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
+var db = require('../factories/db');
+var Sequelize = require('sequelize');
 
-mongoose.models = {};
-mongoose.modelSchemas = {};
+var Director = db.define('director', {
+  name: {
+    type: Sequelize.STRING,
+    field: 'name'
+  }
+},{timestamps: false});
 
-var directorSchema = new Schema({
-  name: String
-});
-
-module.exports = mongoose.model('Director', directorSchema);
+module.exports = Director;

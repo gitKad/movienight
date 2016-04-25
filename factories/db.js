@@ -1,5 +1,5 @@
 var config = require('../config');
-var Connection = require('tedious').Connection;
+var Sequelize = require('sequelize');
 
 var dbConfig;
 switch (process.env.NODE_ENV) {
@@ -13,10 +13,6 @@ switch (process.env.NODE_ENV) {
     dbConfig = config.development.db;
 }
 
-var connection = new Connection(dbConfig);
-  connection.on('connect', function(err) {
-    if(err) throw err;
-      console.log("Connected to ", dbConfig);
-  });
+var sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig.options);
 
-module.exports = connection;
+module.exports = sequelize;
