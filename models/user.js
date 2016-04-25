@@ -1,18 +1,15 @@
-var mongoose = require('../factories/db');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
+var db = require('../factories/db');
+var Sequelize = require('sequelize');
 
-mongoose.models = {};
-mongoose.modelSchemas = {};
-
-var userSchema = new Schema({
-  profile:{
-    firstName:String,
-    lastName:String
+var User = db.define('user', {
+  firstName: {
+    type: Sequelize.STRING,
+    field: 'firstName'
   },
-  accounts:{
-    flixster:Number
+  lastName: {
+    type: Sequelize.STRING,
+    field: 'lastName'
   }
-});
+},{timestamps: false});
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = User;
