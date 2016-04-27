@@ -1,24 +1,19 @@
 require('../utils');
 var expect = require('chai').expect;
-var Director = require('../../models/director');
+var models = require('../../models');
+var Director = models.Director;
 
 describe('My director model', function() {
-
-  before(function(done) {
-    Director.sync({force: true})
-    .then(function() {
-      done();
-    })
-    .catch(function(err){
-      console.log(err);
-    });
-  });
 
   beforeEach(function(done) {
     Director.create({name: 'Christopher Nolan'})
     .then(function() {
       done();
-    });
+    }).catch(function(err) {
+      if (err) console.log(err);
+      if (err) throw err;
+      done();
+    });;
   });
 
   it('can be found in the database', function(done){
@@ -37,28 +32,30 @@ describe('My director model', function() {
       name: testName
     })
     .then(function() {
-      Director.findAll({where:{name:testName}})
-      .then(function (directors) {
-        expect(directors).to.be.ok;
-        expect(directors).to.have.lengthOf(1);
-        expect(directors[0]).to.have.property('name',testName);
-        done();
-      });
+      return Director.findAll({where:{name:testName}})
+    })
+    .then(function (directors) {
+      expect(directors).to.be.ok;
+      expect(directors).to.have.lengthOf(1);
+      expect(directors[0]).to.have.property('name',testName);
+      done();
     });
   });
 
   it('can be removed from the database', function(done) {
+    var nDirectorsBefore;
+
     Director.findAndCountAll()
     .then(function(result) {
-      var nDirectorsBefore = result.count;
-      result.rows[0].destroy()
-      .then(function() {
-        Director.count()
-        .then(function(c) {
-          expect(c).to.equal(nDirectorsBefore-1);
-          done();
-        });
-      });
+      nDirectorsBefore = result.count;
+      return result.rows[0].destroy();
+    })
+    .then(function() {
+      return Director.count();
+    })
+    .then(function(c) {
+      expect(c).to.equal(nDirectorsBefore-1);
+      done();
     });
   });
 });

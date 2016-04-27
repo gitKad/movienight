@@ -1,37 +1,50 @@
-var mongoose = require('../factories/db');
-var Schema = mongoose.Schema;
-var ObjectId = Schema.ObjectId;
-
-mongoose.models = {};
-mongoose.modelSchemas = {};
-
-var movieSchema = new Schema({
-  title: String,
-  release_year: Number,
-  directors: [{
-    _id: Object,
-    name: String
-  }],
-  score: {
-    rottenTomato:{
-      id: Number,
-      tomatometer: Number,
-      avg: Number
+module.exports = function(sequelize, DataTypes) {
+  var Movie = sequelize.define('movie', {
+    title: {
+      type: DataTypes.STRING,
+      field: 'title'
     },
-    flixster:{
-      id: Number,
-      audienceScore: Number,
-      avg: Number
+    release_year: {
+      type: DataTypes.INTEGER,
+      field: 'release_year'
     },
-    imdb:{
-      id: String,
-      score: Number
+    rottenTomato_tomatometer: {
+      type: DataTypes.INTEGER,
+      field: 'rottenTomato_tomatometer'
     },
-    TMDb:{
-      id: Number,
-      score: Number
+    rottenTomato_avg: {
+      type: DataTypes.DECIMAL(10, 2),
+      field: 'rottenTomato_avg'
+    },
+    flixster_id: {
+      type: DataTypes.INTEGER,
+      field: 'flixster_id'
+    },
+    flixster_audienceScore: {
+      type: DataTypes.INTEGER,
+      field: 'flixster_audienceScore'
+    },
+    flixster_avg: {
+      type: DataTypes.DECIMAL(10, 2),
+      field: 'flixster_avg'
+    },
+    imdb_id: {
+      type: DataTypes.STRING,
+      field: 'imdb_id'
+    },
+    imdb_score: {
+      type: DataTypes.DECIMAL(10, 2),
+      field: 'imdb_score'
+    },
+    TMDb_id: {
+      type: DataTypes.INTEGER,
+      field: 'TMDb_id'
+    },
+    TMDb_score: {
+      type: DataTypes.DECIMAL(10, 2),
+      field: 'TMDb_score'
     }
-  }
-});
+  }, {timestamps: false});
 
-module.exports = mongoose.model('Movie', movieSchema);
+  return Movie;
+};
