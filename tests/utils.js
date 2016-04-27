@@ -5,6 +5,8 @@ var Actor = models.Actor;
 var Director = models.Director;
 var Movie = models.Movie;
 var MovieDirectors = models.MovieDirectors;
+var User = models.User;
+var MovieRatings = models.MovieRatings;
 
 before(function (done){
   // Drop and create every models
@@ -14,6 +16,12 @@ before(function (done){
   })
   .then(function() {
     return MovieDirectors.sync();
+  })
+  .then(function() {
+    return User.sync();
+  })
+  .then(function() {
+    return MovieRatings.sync();
   })
   .then(function() {
     done();

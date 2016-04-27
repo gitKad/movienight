@@ -1,18 +1,9 @@
 require('../utils');
 var expect = require('chai').expect;
-var User = require('../../models/user');
+var models = require('../../models');
+var User = models.User;
 
 describe('My user model', function() {
-
-  before(function(done) {
-    User.sync({force: true})
-    .then(function() {
-      done();
-    })
-    .catch(function(err){
-      console.log(err);
-    });
-  });
 
   beforeEach(function(done) {
     User.create({
@@ -43,29 +34,31 @@ describe('My user model', function() {
       lastName: testLastName
     })
     .then(function() {
-      User.findAll({where:{firstName: testFirstName, lastName: testLastName}})
-      .then(function (users) {
-        expect(users).to.be.ok;
-        expect(users).to.have.lengthOf(1);
-        expect(users[0]).to.have.property('firstName',testFirstName);
-        expect(users[0]).to.have.property('lastName',testLastName);
-        done();
-      });
+      return User.findAll({where:{firstName: testFirstName, lastName: testLastName}})
+    })
+    .then(function (users) {
+      expect(users).to.be.ok;
+      expect(users).to.have.lengthOf(1);
+      expect(users[0]).to.have.property('firstName',testFirstName);
+      expect(users[0]).to.have.property('lastName',testLastName);
+      done();
     });
   });
 
   it('can be removed from the database', function(done) {
+    var nUsersBefore;
+
     User.findAndCountAll()
     .then(function(result) {
-      var nUsersBefore = result.count;
-      result.rows[0].destroy()
-      .then(function() {
-        User.count()
-        .then(function(c) {
-          expect(c).to.equal(nUsersBefore-1);
-          done();
-        });
-      });
+      nUsersBefore = result.count;
+      return result.rows[0].destroy();
+    })
+    .then(function() {
+      return User.count();
+    })
+    .then(function(c) {
+      expect(c).to.equal(nUsersBefore-1);
+      done();
     });
   });
 });

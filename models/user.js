@@ -1,15 +1,15 @@
-var db = require('../factories/db');
-var Sequelize = require('sequelize');
+module.exports = function(sequelize, DataTypes) {
+  var User = sequelize.define('user', {
+    firstName: {
+      type: DataTypes.STRING
+    },
+    lastName: {
+      type: DataTypes.STRING
+    },
+    flixster_id: {
+      type: DataTypes.INTEGER
+    }
+  },{timestamps: false});
 
-var User = db.define('user', {
-  firstName: {
-    type: Sequelize.STRING,
-    field: 'firstName'
-  },
-  lastName: {
-    type: Sequelize.STRING,
-    field: 'lastName'
-  }
-},{timestamps: false});
-
-module.exports = User;
+  return User;
+};
