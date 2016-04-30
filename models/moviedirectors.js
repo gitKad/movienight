@@ -1,4 +1,4 @@
 module.exports = function(sequelize, DataTypes) {
-  var MovieDirectors = sequelize.define('MovieDirectors', {}, {timestamps: false});
+  var MovieDirectors = sequelize.define('moviedirectors', {}, {timestamps: false});
   return MovieDirectors;
 };
