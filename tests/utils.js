@@ -5,6 +5,7 @@ var Actor = models.Actor;
 var Director = models.Director;
 var Movie = models.Movie;
 var MovieDirectors = models.MovieDirectors;
+var MovieActors = models.MovieActors;
 var User = models.User;
 var MovieRatings = models.MovieRatings;
 
@@ -15,7 +16,13 @@ before(function (done){
     return Director.sync();
   })
   .then(function() {
+    return Actor.sync();
+  })
+  .then(function() {
     return MovieDirectors.sync();
+  })
+  .then(function() {
+    return MovieActors.sync();
   })
   .then(function() {
     return User.sync();

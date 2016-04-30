@@ -3,7 +3,7 @@ var expect = require('chai').expect;
 var models = require('../../models');
 var Actor = models.Actor;
 
-describe('My actor model', function() {
+describe('An actor', function() {
 
   beforeEach(function(done) {
     Actor.create({name: 'Christopher Nolan'})
@@ -52,4 +52,9 @@ describe('My actor model', function() {
       done();
     });
   });
+
+  it('played in movies', function(done) {
+    done();
+  });
+
 });

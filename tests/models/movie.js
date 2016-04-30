@@ -3,23 +3,8 @@ var Promise = require('bluebird');
 var expect = require('chai').expect;
 var models = require('../../models');
 var Movie = models.Movie;
-var Director = models.Director;
 
-function getMethods(obj) {
-  var result = [];
-  for (var id in obj) {
-    try {
-      if (typeof(obj[id]) == "function") {
-        result.push(id);
-      }
-    } catch (err) {
-      result.push(id + ": inaccessible");
-    }
-  }
-  return result;
-}
-
-describe('My movie model', function() {
+describe('A movie', function() {
 
   beforeEach(function(done) {
     var pulpFiction = {
@@ -38,7 +23,7 @@ describe('My movie model', function() {
       done();
     })
     .catch(function(err) {
-      if (err) throw err;
+      expect(err).to.be.null;
       done();
     });
   });
@@ -85,11 +70,48 @@ describe('My movie model', function() {
     });
   });
 
+  it('was enacted by actors', function(done) {
+    var Actor = models.Actor;
 
+    var keanu = {name: 'Keanu Reeves'};
+    var carrie = {name: 'Carrie-Anne Moss'};
+    var theMatrix;
 
-
+    var promises = [];
+    promises.push(Actor.create(keanu));
+    promises.push(Actor.create(carrie));
+    Promise.all(promises)
+    .then(function(result) {
+      keanu = result[0];
+      carrie = result[1];
+      return Movie.find({where:{title:'The Matrix'}});
+    })
+    .then(function(movie) {
+      theMatrix = movie;
+      return theMatrix.countActors();
+    })
+    .then(function(actorsCount) {
+      expect(actorsCount).to.be.equal(0);
+      return theMatrix.addActors([keanu,carrie]);
+    })
+    .then(function() {
+      return theMatrix.getActors();
+    })
+    .then(function(actors) {
+      expect(actors).to.be.ok;
+      expect(actors).to.have.lengthOf(2);
+      expect(actors[0]).to.have.property('name');
+      done();
+    })
+    .catch(function(err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
 
   it('was realised by directors', function(done) {
+    var Director = models.Director;
+
     var lilly = {name: 'Lilly Wachowski'};
     var lana = {name: 'Lana Wachowski'};
     var theMatrix;
@@ -121,10 +143,9 @@ describe('My movie model', function() {
       done();
     })
     .catch(function(err) {
-      if(err) console.log(err);
+      expect(err).to.be.null;
       done();
     });
-
   });
 
   it('can hold movies with ":" in its title'); // "Che:" part one and two caused crashes
