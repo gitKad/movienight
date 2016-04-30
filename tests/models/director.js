@@ -10,8 +10,7 @@ describe('My director model', function() {
     .then(function() {
       done();
     }).catch(function(err) {
-      if (err) console.log(err);
-      if (err) throw err;
+      expect(err).to.be.null;
       done();
     });;
   });
@@ -58,4 +57,6 @@ describe('My director model', function() {
       done();
     });
   });
+
+  it('directed movies');
 });
