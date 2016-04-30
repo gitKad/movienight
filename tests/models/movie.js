@@ -148,8 +148,6 @@ describe('A movie', function() {
     });
   });
 
-  it('can hold movies with ":" in its title'); // "Che:" part one and two caused crashes
-
   it('can be removed from the database', function(done) {
     var nMoviesBefore;
 
@@ -166,5 +164,7 @@ describe('A movie', function() {
       done();
     });
   });
+
+  it('can hold movie titles with special caracters in its title'); // "Che:" part one and two caused crashes
 
 });
