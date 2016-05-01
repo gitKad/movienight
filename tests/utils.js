@@ -8,6 +8,7 @@ var Movie = models.Movie;
 var MovieDirectors = models.MovieDirectors;
 var MovieActors = models.MovieActors;
 var MovieRatings = models.MovieRatings;
+var ActorPreferences = models.ActorPreferences;
 
 before(function (done){
   // Drop and create every models
@@ -31,6 +32,9 @@ before(function (done){
     return MovieRatings.sync();
   })
   .then(function() {
+    return ActorPreferences.sync();
+  })
+  .then(function() {
     done();
   })
   .catch(function(err) {
@@ -41,11 +45,7 @@ before(function (done){
 });
 
 beforeEach(function (done) {
-  // MovieDirectors.destroy({where:{}})
-  // .then(function() {
-  //   return
   Director.destroy({where:{}})
-  // })
   .then(function() {
     return Movie.destroy({where:{}})
   })
@@ -59,8 +59,7 @@ beforeEach(function (done) {
     done();
   })
   .catch(function(err) {
-    if (err) console.log(err);
-    if (err) throw err;
+    expect(err).to.be.null;
     done();
   });
 });

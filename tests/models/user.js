@@ -3,7 +3,7 @@ var expect = require('chai').expect;
 var models = require('../../models');
 var User = models.User;
 
-describe('My user model', function() {
+describe('My user', function() {
 
   beforeEach(function(done) {
     User.create({
@@ -85,6 +85,53 @@ describe('My user model', function() {
       expect(ratings).to.be.ok;
       expect(ratings[0]).to.have.lengthOf(1);
       expect(ratings[0][0]).to.have.property('rating',96);
+      done();
+    })
+    .catch(function(err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
+
+  it('has actor preferences', function(done) {
+    var Actor = models.Actor;
+
+    var leonardo = {name:'Leonardo DiCaprio'};
+    var jason;
+
+    var testCount = 5;
+    var testAvg = 87;
+    var testStd = 7;
+    var testWeight = 0.7143;
+
+    var preferenceStats = {
+      count: testCount,
+      avg: testAvg,
+      std: testStd,
+      weight: testWeight
+    };
+
+    User.findOne({})
+    .then(function(user) {
+      jason = user;
+      return Actor.create(leonardo);
+    })
+    .then(function(actor) {
+      leonardo = actor;
+      return leonardo.countUsers();
+    })
+    .then(function(preferencesCount) {
+      expect(preferencesCount).to.be.equal(0);
+      return leonardo.addUser(jason, preferenceStats);
+    })
+    .then(function(preferences) {
+      expect(preferences).to.be.ok;
+      expect(preferences[0]).to.have.lengthOf(1);
+      expect(preferences[0][0]).to.be.an('object');
+      expect(preferences[0][0]).to.have.property('count',testCount);
+      expect(preferences[0][0]).to.have.property('avg',testAvg);
+      expect(preferences[0][0]).to.have.property('std',testStd);
+      expect(preferences[0][0]).to.have.property('weight',testWeight);
       done();
     })
     .catch(function(err) {
