@@ -61,4 +61,35 @@ describe('My user model', function() {
       done();
     });
   });
+
+  it('can rate a movie',function(done) {
+    var Movie = models.Movie;
+
+    var inception = {title: 'Inception'};
+    var jason;
+
+    User.findOne({})
+    .then(function(user) {
+      jason = user;
+      return Movie.create(inception);
+    })
+    .then(function(movie) {
+      inception = movie;
+      return inception.countUsers();
+    })
+    .then(function(ratingsCount) {
+      expect(ratingsCount).to.be.equal(0);
+      return inception.addUser(jason, {rating: 96});
+    })
+    .then(function(ratings) {
+      expect(ratings).to.be.ok;
+      expect(ratings[0]).to.have.lengthOf(1);
+      expect(ratings[0][0]).to.have.property('rating',96);
+      done();
+    })
+    .catch(function(err) {
+      expect(err).to.be.null;
+      done();
+    });
+  });
 });

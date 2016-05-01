@@ -3,10 +3,10 @@ process.env.NODE_ENV = 'test';
 var models = require('../models');
 var Actor = models.Actor;
 var Director = models.Director;
+var User = models.User;
 var Movie = models.Movie;
 var MovieDirectors = models.MovieDirectors;
 var MovieActors = models.MovieActors;
-var User = models.User;
 var MovieRatings = models.MovieRatings;
 
 before(function (done){
@@ -52,9 +52,9 @@ beforeEach(function (done) {
   .then(function() {
     return Actor.destroy({where:{}})
   })
-  // .then(function() {
-  //   return User.destroy({where:{}})
-  // })
+  .then(function() {
+    return User.destroy({where:{}})
+  })
   .then(function() {
     done();
   })
