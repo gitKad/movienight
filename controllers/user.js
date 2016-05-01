@@ -1,18 +1,8 @@
-var User = require('../models/user');
+var Promise = require('bluebird');
+var models = require('../models');
+var User = models.User;
 
 var userController = function() {
-};
-
-userController.prototype.get = function (docId,cb) {
-  User.findOne({_id: docId}, function(err, users) {
-    cb(err, users);
-  });
-};
-
-userController.prototype.getAll = function (cb) {
-  User.find(function(err, users) {
-    cb(err, users);
-  });
 };
 
 userController.prototype.flixsterSignup = function (flixsterId, cb) {
