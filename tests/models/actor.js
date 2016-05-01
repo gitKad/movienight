@@ -53,8 +53,6 @@ describe('An actor', function() {
     });
   });
 
-  it('played in movies', function(done) {
-    done();
-  });
+  it('played in movies');
 
 });
