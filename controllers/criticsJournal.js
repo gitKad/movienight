@@ -14,6 +14,7 @@ var criticsJournal = function() {
 criticsJournal.prototype.getFlixsterRatings = function (userId,limit) {
   return new Promise(function(resolve, reject) {
     var user;
+    var movieRatings = [];
     User.findOne({where:{id: userId}})
     .then(function(aUser) {
       user = aUser;
@@ -26,15 +27,12 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,limit) {
     })
     .then(function(flixsterResult) {
       return Promise.all(JSON.parse(flixsterResult).map(function (flixsterRating) {
-        var flixsterRatingScore = flixsterRating.score;
-        return collectionMtnr.hearsAboutThisMovieFromFlixster(flixsterRating.movie);
+        var flixsterRatingScore = parseFloat(flixsterRating.score)/5*100;
+        return collectionMtnr.hearsAboutThisMovieFromFlixster(flixsterRating.movie)
+        .then(function(movie) {
+          return user.addMovie(movie, {rating: flixsterRatingScore});
+        });
       }))
-      .then(function(movies) {
-        return Promise.all(movies.map(function(movie) {
-          // todo resolve variable scope to get rating from flixsterResult[i].score
-          return user.addMovie(movie, {rating: 99});
-        }));
-      })
     })
     .then(resolve)
     .catch(reject);
