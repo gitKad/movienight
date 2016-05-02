@@ -1,40 +1,31 @@
-var User = require('../models/user');
+var Promise = require('bluebird');
+var models = require('../models');
+var User = models.User;
 var criticsJournal = require('../controllers/criticsJournal');
 
 var userRegistrar = function(){
   criticsJrnl = new criticsJournal();
 };
 
-userRegistrar.prototype.registerFlixsterUserFromMovieRatings = function (flixsterMovieRating,cb) {
-  var promiseOfAUser = new Promise(function (resolve, reject) {
-    User.findOne({'accounts.flixster': flixsterMovieRating.user.id},function(err,doc) {
-      if(err) { reject(err); }
-      if(doc == null) {
-        var newUser = new User({
-          profile: {
-            firstName: flixsterMovieRating.user.firstName,
-            lastName: flixsterMovieRating.user.lastName
-          },
-          accounts: {
-            flixster: flixsterMovieRating.user.id
-          }
-        });
-        newUser.save(function(err,doc) {
-          if(err) { reject(err); }
-          resolve(doc);
-        });
-      }
-      else {
-        resolve(doc);
-      }
-    });
-  });
+userRegistrar.prototype.registerFlixsterUserFromMovieRatings = function (flixsterMovieRating) {
+  return new Promise(function (resolve, reject) {
 
-  promiseOfAUser.then(function(promisedUser) {
-    // The hardcoded 2 here should be 1000, but it takes like a minute to load 300 ratings!!
-    criticsJrnl.getFlixsterRatings(promisedUser._id,2,function(){
-      cb(promisedUser);
-    });
+    var newUser = {
+      firstName: flixsterMovieRating.user.firstName,
+      lastName: flixsterMovieRating.user.lastName,
+      flixster_id: flixsterMovieRating.user.id
+    }
+
+    User.findOrCreate({where:newUser})
+    .spread(function(aUser,isCreated) {
+      newUser = aUser
+      return criticsJrnl.getFlixsterRatings(newUser.id,2);
+    })
+    .then(function(ratings) {
+      resolve(newUser);
+    })
+    .catch(reject);
+
   });
 };
 

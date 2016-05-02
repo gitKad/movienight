@@ -1,6 +1,8 @@
-var expect = require('chai').expect,
-    Movie = require('../../models/movie'),
-    collectionMaintainer = require('../../controllers/collectionMaintainer');
+require('../utils');
+var expect = require('chai').expect;
+var models = require('../../models');
+var Movie = models.Movie;
+var collectionMaintainer = require('../../controllers/collectionMaintainer');
 
 require('../utils');
 
@@ -12,58 +14,67 @@ describe('My collection maintainer', function() {
   });
 
   beforeEach(function(done){
-    var fightClub = new Movie({
+    var fightClub = {
       title: 'Fight Club',
-      score: {
-        TMDb:{
-          id: 550
-        }
-      }
-    });
-    var pulpFiction = new Movie({
+      TMDb_id: 550
+    };
+    var pulpFiction = {
       title: 'Pulp Fiction',
       release_year: 1994
-    });
-    var forestGump = new Movie({
+    };
+    var forestGump = {
       title: 'Forest Gump'
-    });
+    };
 
-    var promiseArr = [];
-    promiseArr.push(new Promise(function(resolve,reject){fightClub.save(resolve);}));
-    promiseArr.push(new Promise(function(resolve,reject){pulpFiction.save(resolve);}));
-    promiseArr.push(new Promise(function(resolve,reject){forestGump.save(resolve);}));
-    Promise.all(promiseArr).then(done());
+    var promises = [];
+    promises.push(Movie.create(fightClub));
+    promises.push(Movie.create(pulpFiction));
+    promises.push(Movie.create(forestGump));
+    Promise.all(promises).then( function() {done();});
   });
 
   it('can retrieve data about a movie it only has basic information on',function(done) {
-    Movie.findOne({title: 'Pulp Fiction'},function(err,aMovie) {
-      expect(err).to.be.null;
+    this.timeout(5000);
+    Movie.findOne({where:{title: 'Pulp Fiction'}})
+    .then(function(aMovie) {
       expect(aMovie).to.not.be.undefined;
-      expect(aMovie.score.TMDb.id).to.be.undefined;
-      collectionMaintainer.updatesMovieDocument(aMovie._id,function(err, result) {
-        expect(result).to.be.ok;
-        expect(result).to.have.deep.property('score.TMDb.id',680);
-        expect(result).to.have.property('directors');
-        expect(result.directors).to.have.lengthOf(1);
-        expect(result.directors[0]).to.have.property('name','Quentin Tarantino');
-        done();
-      });
+      expect(aMovie.TMDb_id).to.be.null;
+      return collectionMaintainer.updatesMovieDocument(aMovie.id);
+    })
+    .then(function(aMovie) {
+      expect(aMovie).to.be.ok;
+      expect(aMovie).to.have.property('TMDb_id',680);
+      return aMovie.getDirectors();
+    })
+    .then(function(directors) {
+      expect(directors).to.have.lengthOf(1);
+      expect(directors[0]).to.have.property('name','Quentin Tarantino');
+      done();
+    })
+    .catch(function(err) {
+      expect(err).to.be.null;
     });
   });
 
   it('can add a movie discovered in a flixster rating to its collection', function(done){
     var flixsterLurker = require('../../lurkers/flixster');
     flixsterLurker = new flixsterLurker();
-    flixsterLurker.getFlixsterUsersScores(789760392,1,function(response) {
-      var jsonResponse = JSON.parse(response);
-      Movie.count({title: jsonResponse[0].movie.title, release_year:jsonResponse[0].movie.year},function(err,nMoviesBefore){
-        collectionMaintainer.hearsAboutThisMovieFromFlixster(jsonResponse[0].movie,function(err,cb) {
-          Movie.count({title: jsonResponse[0].movie.title, release_year:jsonResponse[0].movie.year},function(err,nMoviesAfter){
-            expect(nMoviesAfter).to.equal(nMoviesBefore+1);
-            done();
-          });
-        });
-      });
+    var jsonResponse, nMoviesBefore;
+    flixsterLurker.getFlixsterUsersScores(789760392,1)
+    .then(function(response) {
+      jsonResponse = JSON.parse(response);
+      return Movie.count({title: jsonResponse[0].movie.title, release_year:jsonResponse[0].movie.year});
+    })
+    .then(function(c) {
+      nMoviesBefore = c;
+      return collectionMaintainer.hearsAboutThisMovieFromFlixster(jsonResponse[0].movie);
+    })
+    .then(function() {
+      return Movie.count({title: jsonResponse[0].movie.title, release_year:jsonResponse[0].movie.year});
+    })
+    .then(function(nMoviesAfter) {
+      expect(nMoviesAfter).to.equal(nMoviesBefore+1);
+      done();
     });
   });
 

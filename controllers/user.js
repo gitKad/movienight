@@ -5,18 +5,22 @@ var User = models.User;
 var userController = function() {
 };
 
-userController.prototype.flixsterSignup = function (flixsterId, cb) {
-  var flixsterLurker = require('../lurkers/flixster');
-  flixsterLurker = new flixsterLurker();
-
-  flixsterLurker.getFlixsterUsersScores(flixsterId,1,function(result) {
+userController.prototype.flixsterSignup = function (flixsterId) {
+  return new Promise(function (resolve, reject) {
+    var flixsterLurker = require('../lurkers/flixster');
+    flixsterLurker = new flixsterLurker();
     var userRegistrar = require('../controllers/userRegistrar');
     userRegistrar = new userRegistrar();
 
-    var jsonResponse = JSON.parse(result);
-    userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0],function(user) {
-      cb(null,user); // no error is thrown here at this point
-    });
+    flixsterLurker.getFlixsterUsersScores(flixsterId,1)
+    .then(function(result) {
+      var jsonResponse = JSON.parse(result);
+      return userRegistrar.registerFlixsterUserFromMovieRatings(jsonResponse[0]);
+    })
+    .then(function(user,created) {
+      resolve(user);
+    })
+    .catch(reject);
   });
 };
 

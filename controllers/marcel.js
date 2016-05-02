@@ -1,6 +1,7 @@
-var Rating = require('../models/rating');
-var Movie = require('../models/movie');
-var CrewPref = require('../models/prefCrew');
+var models = require('../models');
+var Rating = models.Rating;
+var Movie = models.Movie;
+var CrewPref = models.CrewPref;
 
 var marcel = function() {
   this.weightOfTheDirectorRole = 1;

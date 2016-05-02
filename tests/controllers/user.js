@@ -13,19 +13,22 @@ describe('My user controller', function(){
   beforeEach(function(done) {
     var Jason = {firstname:"Jason"};
     var Morgane = {firstname:"Morgane"};
-    User.create(Jason)
-    .then(function() {
+
+    Promise.all([
+      User.create(Jason),
       User.create(Morgane)
-    })
+    ])
     .then(function() {
       done();
     });
   });
 
   it('signs up an account by flixsterId',function(done) {
+    this.timeout(5000);
     var testFlixsterID = 789760392;
-    userController.flixsterSignup(testFlixsterID,function(err,user) {
-      expect(user).to.have.deep.property('accounts.flixster',testFlixsterID);
+    userController.flixsterSignup(testFlixsterID)
+    .then(function(user) {
+      expect(user).to.have.property('flixster_id',testFlixsterID);
       done();
     });
   });
