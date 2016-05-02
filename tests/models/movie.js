@@ -7,19 +7,11 @@ var Movie = models.Movie;
 describe('A movie', function() {
 
   beforeEach(function(done) {
-    var pulpFiction = {
-      title: 'Pulp Fiction',
-      release_year: 1994
-    };
     var theMatrix = {
       title: 'The Matrix',
       release_year: 1999
     };
-
-    var promises = [];
-    promises.push(Movie.create(pulpFiction));
-    promises.push(Movie.create(theMatrix));
-    Promise.all(promises).then(function() {
+    Movie.create(theMatrix).then(function() {
       done();
     })
     .catch(function(err) {
@@ -32,8 +24,7 @@ describe('A movie', function() {
     Movie.findOne({})
     .then(function(movie) {
       expect(movie).to.be.ok;
-      expect(movie).to.have.property('title','Pulp Fiction');
-      expect(movie).to.have.property('release_year',1994);
+      expect(movie).to.have.property('title','The Matrix');
       done();
     });
   });

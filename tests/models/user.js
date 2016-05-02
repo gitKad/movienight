@@ -20,7 +20,6 @@ describe('My user', function() {
     .then(function(user) {
       expect(user).to.be.ok;
       expect(user).to.have.property('firstName','Jason');
-      expect(user).to.have.property('lastName','Duff');
       done();
     });
   });
