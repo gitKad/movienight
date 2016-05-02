@@ -61,7 +61,7 @@ describe('A movie', function() {
     });
   });
 
-  it('was enacted by actors', function(done) {
+  it('is played by actors', function(done) {
     var Actor = models.Actor;
 
     var keanu = {name: 'Keanu Reeves'};
@@ -83,7 +83,10 @@ describe('A movie', function() {
     })
     .then(function(actorsCount) {
       expect(actorsCount).to.be.equal(0);
-      return theMatrix.addActors([keanu,carrie]);
+      promises = [];
+      promises.push(theMatrix.addActor(keanu, {importance: 1}));
+      promises.push(theMatrix.addActor(carrie, {importance: 2}));
+      return Promise.all(promises);
     })
     .then(function() {
       return theMatrix.getActors();
