@@ -15,11 +15,11 @@ describe('My director api', function() {
   });
 
   it('responds to "get all" requests', function(done) {
-      request(server)
-      .get('/api/directors/')
-      .expect(200)
-      .expect('Content-Type', /json/)
-      .end(done);
+    request(server)
+    .get('/api/directors/')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(done);
   });
 
   it('responds to a "get" requests', function(done) {

@@ -31,7 +31,17 @@ describe('My user api', function() {
     .end(done);
   });
 
+  it('responds to a "get" user ratings requests', function(done) {
+    var randomUserId = parseInt((Math.random() * 100), 10)
+    request(server)
+    .get('/api/users/'+randomUserId+'/ratings')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(done);
+  });
+
   it('responds to the signup of a flixster user', function(done) {
+    this.timeout(5000);
     var testFlixsterID = 789760392;
     request(server)
     .get('/api/users/signup/flixster/'+testFlixsterID)

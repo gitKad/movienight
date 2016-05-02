@@ -31,7 +31,7 @@ criticsJournal.prototype.getFlixsterRatings = function (userId,limit) {
       }))
       .then(function(movies) {
         return Promise.all(movies.map(function(movie) {
-          // todoresolve variable scope to get rating from flixsterResult[i].score
+          // todo resolve variable scope to get rating from flixsterResult[i].score
           return user.addMovie(movie, {rating: 99});
         }));
       })

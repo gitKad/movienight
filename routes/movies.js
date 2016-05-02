@@ -1,25 +1,25 @@
 var express = require('express');
 var router  = express.Router();
+var models = require('../models');
+var Movie = models.Movie;
 
 router.route('/movies').get(function(req, res) {
-	var movieController = require('../controllers/movie');
-  movieController = new movieController();
-	movieController.getAll(function(err, ratings) {
-		if (err) {
-			res.send(err);
-    }
-		res.json(ratings);
+	Movie.findAll({})
+	.then(function(movies) {
+		res.json(movies);
+	})
+	.catch(function(err) {
+		res.send(err);
 	});
 });
 
 router.get('/movies/:movieId', function(req, res, next) {
-	var movieController = require('../controllers/movie');
-	movieController = new movieController();
-	movieController.get(req.params.movieId,function(err, rating) {
-		if (err) {
-			res.send(err);
-		}
-		res.json(rating);
+	Movie.findById(req.params.movieId)
+	.then(function(movie) {
+		res.json(movie);
+	})
+	.catch(function(err) {
+		res.send(err);
 	});
 });
 

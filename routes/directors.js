@@ -1,25 +1,25 @@
 var express = require('express');
 var router  = express.Router();
+var models = require('../models');
+var Director = models.Director;
 
 router.route('/directors').get(function(req, res) {
-	var directorController = require('../controllers/director');
-  directorCtrl = new directorController();
-	directorCtrl.getAll(function(err, directors) {
-		if (err) {
-			res.send(err);
-    }
+	Director.findAll({})
+	.then(function(directors) {
 		res.json(directors);
+	})
+	.catch(function(err) {
+		res.send(err);
 	});
 });
 
 router.get('/directors/:directorId', function(req, res, next) {
-	var directorController = require('../controllers/director');
-	directorCtrl = new directorController();
-	directorCtrl.get(req.params.directorId,function(err, director) {
-		if (err) {
-			res.send(err);
-		}
+	Director.findById(req.params.directorId)
+	.then(function(director) {
 		res.json(director);
+	})
+	.catch(function(err) {
+		res.send(err);
 	});
 });
 
