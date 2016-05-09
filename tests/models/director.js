@@ -1,4 +1,4 @@
-require('../utils');
+require('../testUtils');
 var expect = require('chai').expect;
 var models = require('../../models');
 var Director = models.Director;

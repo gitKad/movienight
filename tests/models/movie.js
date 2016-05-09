@@ -1,4 +1,4 @@
-require('../utils');
+require('../testUtils');
 var Promise = require('bluebird');
 var expect = require('chai').expect;
 var models = require('../../models');

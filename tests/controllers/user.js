@@ -1,4 +1,4 @@
-require('../utils');
+require('../testUtils');
 var expect = require('chai').expect;
 var userController = require('../../controllers/user.js');
 var models = require('../../models');
