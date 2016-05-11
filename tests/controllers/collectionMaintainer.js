@@ -4,8 +4,6 @@ var models = require('../../models');
 var Movie = models.Movie;
 var collectionMaintainer = require('../../controllers/collectionMaintainer');
 
-require('../utils');
-
 describe('My collection maintainer', function() {
 
   before(function(done){
