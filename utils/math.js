@@ -23,8 +23,11 @@ exports.variance = function (terms) {
 
 exports.mean = function (terms) {
   if(terms.length == 0) return undefined;
-  var sum = terms.reduce(function(accumulator, x) {
+  return exports.sum(terms) / terms.length;
+};
+
+exports.sum = function (terms) {
+  return terms.reduce(function(accumulator, x) {
     return accumulator + x;
   },0);
-  return sum / terms.length;
 };

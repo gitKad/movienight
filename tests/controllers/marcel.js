@@ -1,85 +1,101 @@
-require('../utils');
+require('../testUtils');
 var expect = require('chai').expect;
-
-var models = require('../../models');
-var Rating = models.Rating;
-var Movie = models.Movie;
-var CrewPref = models.CrewPref;
 var marcel = require('../../controllers/marcel');
+var models = require('../../models');
+var User = models.User;
+var Movie = models.Movie;
+var Director = models.Director;
+var Actor = models.Actor;
+var CrewPref = models.CrewPref;
+var ActorPreferences = models.ActorPreferences;
 
-describe.skip('My concierge, Marcel,', function() {
+describe('My concierge, Marcel,', function() {
 
   before(function(done){
     Marcel = new marcel();
     done();
   });
 
-  beforeEach(function(done){
-    promiseArr = [];
-    new Promise(function(resolve) {
-      new Movie({
-        directors:[{_id:040901},{_id:040902}],
-        actors:[{_id:010301,order:0},{_id:010302,order:1},{_id:010303,order:2},{_id:010304,order:3},{_id:010305,order:4}]
-      }).save(function(err,savedMovie) {
-        new Rating({user:{_id:211901},movie:{_id:savedMovie._id},rating:70}).save(resolve)
-      });
+  beforeEach(function(done) {
+    var promises = [];
+
+    var kad = {firstName: 'Alexis', lastName: 'Philippe', flixster_id: 789760392};
+    var wolfOfWallStreet = {title: 'The Wolf of Wall Street', release_year: 2013};
+    var inception = {title: 'Inception', release_year: 2010};
+    var scorsese = {name: 'Martin Scorsese'};
+    var chrisNolan = {name: 'Christopher Nolan'};
+    var leo = {name: 'Leonardo DiCaprio'};
+    var jonah = {name: 'Jonah Hill'};
+    var margot = {name: 'Margot Robbie'};
+    var joseph = {name: 'Joseph Gordon-Levitt'};
+    var ellen = {name: 'Ellen Page'};
+    promises.push(User.create(kad).then(function(user) {kad = user;}));
+    promises.push(Director.create(chrisNolan).then(function(director) {chrisNolan = director;}));
+    promises.push(Director.create(scorsese).then(function(director) {scorsese = director;}));
+    promises.push(Actor.create(leo).then(function(actor) {leo = actor;}));
+    promises.push(Actor.create(jonah).then(function(actor) {jonah = actor;}));
+    promises.push(Actor.create(margot).then(function(actor) {margot = actor;}));
+    promises.push(Actor.create(joseph).then(function(actor) {joseph = actor;}));
+    promises.push(Actor.create(ellen).then(function(actor) {ellen = actor;}));
+    promises.push(Movie.create(wolfOfWallStreet).then(function(movie) {wolfOfWallStreet = movie;}));
+    promises.push(Movie.create(inception).then(function(movie) {inception = movie;}));
+    Promise.all(promises)
+    .then(function() {
+      promises = [];
+      promises.push(inception.addDirector(chrisNolan));
+      promises.push(inception.addActor(leo, {importance: 1}));
+      promises.push(inception.addActor(joseph, {importance: 2}));
+      promises.push(inception.addActor(ellen, {importance: 3}));
+      promises.push(inception.addUser(kad, {rating: 95}));
+      promises.push(wolfOfWallStreet.addDirector(scorsese));
+      promises.push(wolfOfWallStreet.addActor(leo, {importance: 1}));
+      promises.push(wolfOfWallStreet.addActor(jonah, {importance: 2}));
+      promises.push(wolfOfWallStreet.addActor(margot, {importance: 3}));
+      promises.push(wolfOfWallStreet.addUser(kad, {rating: 90}));
+      return Promise.all(promises);
+    })
+    .then(function() {
+      done();
+    })
+    .catch(function(err) {
+      expect(err).to.be.null;
+      done();
     });
-    new Promise(function(resolve) {
-      new Movie({directors:[{_id:040901}],
-        actors:[{_id:010308,order:0},{_id:010307,order:1},{_id:010306,order:2},{_id:010305,order:3},{_id:010304,order:4}]
-      }).save(function(err,savedMovie) {
-        new Rating({user:{_id:211901},movie:{_id:savedMovie._id},rating:60}).save(resolve)
-      });
-    });
-    new Promise(function(resolve) {
-      new Movie({directors:[{_id:040903}],
-        actors:[{_id:010308,order:0},{_id:010309,order:1},{_id:010310,order:2},{_id:010311,order:3},{_id:010312,order:4}]
-      }).save(function(err,savedMovie) {
-        new Rating({user:{_id:211901},movie:{_id:savedMovie._id},rating:80}).save(resolve)
-      });
-    });
-    Promise.all(promiseArr).then(done());
   });
 
-  it.skip('can infer who are the favorite movie directors of a user', function(done){
-    CrewPref.count({},function(err,n) {
-      expect(n).to.be.equal(0);
-      Marcel.computePreferedCrewOf(211901,function(err,prefs) {
-        expect(err).to.be.null;
-        expect(prefs).to.have.lengthOf(3);
-        expect(prefs[0]).to.have.deep.property('user._id',211901);
-        expect(prefs[0]).to.have.deep.property('crew._id',010308);
-        expect(prefs[0]).to.have.property('count',2);
-        expect(prefs[0]).to.have.property('average',65);
-        expect(prefs[0]).to.have.property('stdev',5);
-        expect(prefs[0]).to.have.property('weight');
-        expect(prefs[0].weight).to.be.a(numeric);
-        done();
-      });
+  it('can infer who are the favorite actors of a user', function(done) {
+    var user;
+
+    User.findOne()
+    .then(function(aUser) {
+      user = aUser;
+      return ActorPreferences.count({});
+    })
+    .then(function(c) {
+      expect(c).to.be.equal(0);
+      return Marcel.computePreferedActorsOf(user.id);
+    })
+    .then(function(prefs) {
+      expect(prefs).to.have.lengthOf(5);
+      expect(prefs[0].prefactors).to.have.property('userId',user.id);
+      expect(prefs[0].prefactors).to.have.property('actorId');
+      expect(prefs[0].prefactors).to.have.property('count');
+      expect(prefs[0].prefactors).to.have.property('avg');
+      expect(prefs[0].prefactors).to.have.property('std');
+      expect(prefs[0].prefactors).to.have.property('weight');
+      expect(prefs[0].prefactors.weight).to.be.a('number');
+      done();
+    })
+    .catch(function(err) {
+      expect(err).to.be.null;
+      done();
     });
+
   });
 
-  it.skip('can infer who are the favorite actors of a user', function(done){
-    ActorPref.count({},function(err,n) {
-      expect(n).to.be.equal(0);
-      Marcel.computePreferedActorsOf(211901,function(err,prefs) {
-        expect(err).to.be.null;
-        expect(prefs).to.have.lengthOf(12);
-        expect(prefs[0]).to.have.deep.property('user._id',211901);
-        expect(prefs[0]).to.have.deep.property('actor._id',040901);
-        expect(prefs[0]).to.have.property('count',2);
-        expect(prefs[0]).to.have.property('average',65);
-        expect(prefs[0]).to.have.property('stdev',5);
-        expect(prefs[0]).to.have.property('weight');
-        expect(prefs[0].weight).to.be.a(numeric);
-        done();
-      });
-    });
-  });
+  it('can infer who are the favorite movie directors of a user');
 
   it('can infer who are the favorite genres of a user');
   it('can create a list of movie recommendation of a user');
   it('can guess how a user liked a movie he watched');
-
-
 });
